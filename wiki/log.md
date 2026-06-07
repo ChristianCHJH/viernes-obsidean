@@ -4,6 +4,12 @@ Registro cronológico de operaciones. Formato de entrada: `## [YYYY-MM-DD] tipo 
 
 Tipos: `init` | `ingest` | `query` | `lint` | `update`
 
+## [2026-06-07] restructure | venta-inventario-frontend.md dividido en 11 sub-páginas atómicas — 2217 líneas → ~100 líneas/archivo
+
+- Hub reemplazado con stack, estado actual y WikiLinks
+- 10 sub-páginas nuevas: migracion-material, patrones, permisos-rbac, gotchas, productos, registro, productos-premium, productos-premium-ux, diseno, sedes
+- index.md actualizado: 10 nuevas entradas, total páginas 27 → 37
+
 ## [2026-06-07] ingest | sesión 46: sede-stock → drawer, redesign premium, toggle custom + select nativo, SALIDA como 3er tipo
 
 - `venta-inventario-frontend.md`: secciones nuevas:

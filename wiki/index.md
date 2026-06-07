@@ -2,7 +2,7 @@
 
 Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
-Última actualización: 2026-06-06 (sesión 43)
+Última actualización: 2026-06-07 (restructure frontend)
 
 ---
 
@@ -23,7 +23,17 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 | [[proyectos/venta-inventario-inventario]] | Módulos, tablas, endpoints, flujos | activo |
 | [[proyectos/venta-inventario-rbac]] | RBAC 3 capas, permisos, roles, SQL seed | activo |
 | [[proyectos/venta-inventario-android]] | App Adifnex, MVVM, TokenAuthenticator | activo |
-| [[proyectos/venta-inventario-frontend]] | Angular, extraerDatos(), sidebar | activo |
+| [[proyectos/venta-inventario-frontend]] | Hub Angular — stack, estado, links a sub-páginas | activo |
+| [[proyectos/venta-inventario-frontend-migracion-material]] | Migración PrimeNG → Angular Material (7 fases, completado 2026-06-03) | activo |
+| [[proyectos/venta-inventario-frontend-patrones]] | Patrones HTTP envelope, tenant reload, toObservable+switchMap, guard contexto | activo |
+| [[proyectos/venta-inventario-frontend-permisos-rbac]] | Permisos UI, nivel inline, secciones unificadas, reasignación negocio | activo |
+| [[proyectos/venta-inventario-frontend-gotchas]] | Gotchas Angular/CSS/Material — colección completa | activo |
+| [[proyectos/venta-inventario-frontend-productos]] | Marcas/Etiquetas, bugs lista productos, UX rediseño, paginación | activo |
+| [[proyectos/venta-inventario-frontend-registro]] | Registro 2 pasos, guards, bugs responsive | activo |
+| [[proyectos/venta-inventario-frontend-productos-premium]] | Modal 4 tabs, design system Adifnex, SKU automático, eliminar | activo |
+| [[proyectos/venta-inventario-frontend-productos-premium-ux]] | UX mobile, bottom sheets, card compact prod-row, paginación fix | activo |
+| [[proyectos/venta-inventario-frontend-diseno]] | Tokens globales --p-*, sidebar v2, top bar, negative margins, CSS budget | activo |
+| [[proyectos/venta-inventario-frontend-sedes]] | Sedes lista premium, drawer stock, toggle custom, select nativo | activo |
 | [[proyectos/venta-inventario-testing]] | Jest 114 tests backend, mocks Sequelize, Playwright plan | activo |
 | [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, plantillas, permisos Plan 2, migración 014 | activo |
 | [[proyectos/proyecto-spa]] | Base arquitectónica SPA con ADR y ai-workflow | activo |
@@ -77,7 +87,7 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
 ## Notas del wiki
 
-- Total de páginas: 27
+- Total de páginas: 37
 - Proyectos con ingestión profunda completa: 2 (venta-inventario, autenticacion-prototipo)
 - venta-inventario refactorizado a hub + 6 sub-páginas atómicas (2026-05-07)
 - `venta-inventario-frontend.md` actualizado 2026-05-08: regla permisos permanente, vista unificada Secciones+Permisos, bugs `pi-slash` y password autocomplete
