@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan: Categorías y Variantes de Producto — Adifnex</title>
+  <style>
+    :root {
+      --verde: #16A34A;
+      --verde-dark: #064E3B;
+      --verde-light: #DCFCE7;
+      --naranja: #EA580C;
+      --naranja-light: #FFF7ED;
+      --gris-50: #F9FAFB;
+      --gris-100: #F3F4F6;
+      --gris-200: #E5E7EB;
+      --gris-400: #9CA3AF;
+      --gris-600: #4B5563;
+      --gris-800: #1F2937;
+      --azul-light: #EFF6FF;
+      --azul: #2563EB;
+      --violeta-light: #F5F3FF;
+      --violeta: #7C3AED;
+      --rojo-light: #FEF2F2;
+      --rojo: #DC2626;
+      --amarillo-light: #FEFCE8;
+      --amarillo: #CA8A04;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-50);
+      color: var(--gris-800);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde) 100%);
+      color: white;
+      padding: 2.5rem 3rem;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .header p { font-size: 1rem; opacity: 0.85; max-width: 700px; }
+    .header-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .header-meta-item { font-size: 0.85rem; opacity: 0.75; }
+    .header-meta-item strong { opacity: 1; }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* SECCIONES */
+    .section { margin-bottom: 2.5rem; }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--verde-dark);
+      border-left: 4px solid var(--verde);
+      padding-left: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gris-800);
+      margin-bottom: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    /* CARDS */
+    .card {
+      background: white;
+      border: 1px solid var(--gris-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .card-title { font-weight: 600; font-size: 1rem; }
+    .card-subtitle { font-size: 0.8rem; color: var(--gris-400); }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media(max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* TABLES */
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gris-200); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead tr { background: var(--gris-100); }
+    th { text-align: left; padding: 0.65rem 1rem; font-weight: 600; color: var(--gris-600); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid var(--gris-200); vertical-align: top; }
+    tr:hover td { background: var(--gris-50); }
+    .pk { color: var(--naranja); font-weight: 700; font-size: 0.75rem; }
+    .fk { color: var(--azul); font-weight: 600; font-size: 0.75rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .badge-verde { background: var(--verde-light); color: var(--verde-dark); }
+    .badge-naranja { background: var(--naranja-light); color: var(--naranja); }
+    .badge-azul { background: var(--azul-light); color: var(--azul); }
+    .badge-violeta { background: var(--violeta-light); color: var(--violeta); }
+    .badge-gris { background: var(--gris-100); color: var(--gris-600); }
+    .badge-rojo { background: var(--rojo-light); color: var(--rojo); }
+
+    /* CODE */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 10px;
+      padding: 1.25rem;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+    }
+    .sql-kw { color: #cba6f7; }
+    .sql-type { color: #89b4fa; }
+    .sql-str { color: #a6e3a1; }
+    .sql-comment { color: #6c7086; font-style: italic; }
+    .sql-num { color: #fab387; }
+
+    /* ÁRBOL */
+    .tree { font-family: monospace; font-size: 0.875rem; line-height: 1.8; }
+    .tree-root { color: var(--verde-dark); font-weight: 700; }
+    .tree-l1 { color: var(--gris-800); font-weight: 600; }
+    .tree-l2 { color: var(--gris-600); }
+    .tree-l3 { color: var(--gris-400); }
+
+    /* DECISIONES */
+    .decision-card {
+      background: white;
+      border: 1px solid var(--gris-200);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .decision-header {
+      background: var(--gris-100);
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .decision-body { padding: 1rem 1.25rem; }
+    .option {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border: 1px solid var(--gris-200);
+    }
+    .option.recommended {
+      border-color: var(--verde);
+      background: var(--verde-light);
+    }
+    .option-label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      min-width: 28px;
+    }
+    .option-content { flex: 1; }
+    .option-title { font-weight: 600; font-size: 0.875rem; }
+    .option-desc { font-size: 0.8rem; color: var(--gris-600); margin-top: 0.2rem; }
+    .rec-badge {
+      display: inline-block;
+      background: var(--verde);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* FLOW */
+    .flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .flow-step {
+      flex: 1;
+      min-width: 120px;
+      background: white;
+      border: 1px solid var(--gris-200);
+      border-radius: 0;
+      padding: 1rem;
+      position: relative;
+      text-align: center;
+    }
+    .flow-step:first-child { border-radius: 10px 0 0 10px; }
+    .flow-step:last-child { border-radius: 0 10px 10px 0; }
+    .flow-step + .flow-step { border-left: none; }
+    .flow-num {
+      width: 28px; height: 28px;
+      background: var(--verde);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+    }
+    .flow-label { font-size: 0.8rem; font-weight: 600; }
+    .flow-sub { font-size: 0.7rem; color: var(--gris-400); margin-top: 0.2rem; }
+
+    /* PREGUNTAS */
+    .question {
+      background: var(--amarillo-light);
+      border: 1px solid #FDE68A;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .question-num {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .question-text { font-size: 0.9rem; font-weight: 600; }
+    .question-context { font-size: 0.8rem; color: var(--gris-600); margin-top: 0.2rem; }
+
+    /* ALERT */
+    .alert {
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .alert-naranja { background: var(--naranja-light); border: 1px solid #FED7AA; }
+    .alert-verde { background: var(--verde-light); border: 1px solid #86EFAC; }
+    .alert-azul { background: var(--azul-light); border: 1px solid #BFDBFE; }
+    .alert-violeta { background: var(--violeta-light); border: 1px solid #DDD6FE; }
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .alert-body { flex: 1; }
+    .alert-title { font-weight: 700; font-size: 0.875rem; margin-bottom: 0.2rem; }
+    .alert-desc { font-size: 0.8rem; color: var(--gris-600); }
+
+    /* SEPARADOR */
+    hr { border: none; border-top: 1px solid var(--gris-200); margin: 2rem 0; }
+
+    /* TOC */
+    .toc {
+      background: white;
+      border: 1px solid var(--gris-200);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .toc-title { font-weight: 700; font-size: 0.875rem; color: var(--gris-600); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .toc ol { padding-left: 1.25rem; }
+    .toc li { font-size: 0.875rem; margin-bottom: 0.3rem; }
+    .toc a { color: var(--verde); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* IMPACTO */
+    .impacto-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    @media(max-width: 768px) { .impacto-grid { grid-template-columns: repeat(2, 1fr); } }
+    .impacto-card {
+      background: white;
+      border: 1px solid var(--gris-200);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .impacto-card .ico { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .impacto-card .lbl { font-size: 0.75rem; color: var(--gris-400); }
+    .impacto-card .val { font-size: 0.9rem; font-weight: 700; }
+
+    /* EXISTING IMPACT */
+    .affected { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.65rem; border-radius: 100px; font-size: 0.75rem; font-weight: 600; }
+    .chip-rojo { background: var(--rojo-light); color: var(--rojo); }
+    .chip-amarillo { background: var(--amarillo-light); color: var(--amarillo); }
+    .chip-verde { background: var(--verde-light); color: var(--verde-dark); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">Plan de diseño — v1.0</div>
+  <h1>Categorías Jerárquicas y Variantes de Producto</h1>
+  <p>Análisis de arquitectura para agregar clasificación en árbol (ropa, calzado, bebé) y variantes (tallas, colores) a los productos de Adifnex. Diseñado para reutilización multi-negocio (SaaS).</p>
+  <div class="header-meta">
+    <div class="header-meta-item">📅 <strong>Fecha:</strong> 2026-05-31</div>
+    <div class="header-meta-item">🏗️ <strong>Stack:</strong> NestJS 10 + Sequelize + Angular 18</div>
+    <div class="header-meta-item">🎯 <strong>Proyecto:</strong> Adifnex / venta-inventario</div>
+    <div class="header-meta-item">📋 <strong>Estado:</strong> En análisis</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Contenido</div>
+    <ol>
+      <li><a href="#resumen">Resumen ejecutivo</a></li>
+      <li><a href="#categorias">Sistema de categorías (árbol jerárquico)</a></li>
+      <li><a href="#variantes">Sistema de variantes (atributos + valores)</a></li>
+      <li><a href="#stock">Stock por variante</a></li>
+      <li><a href="#colores-imagenes">Colores + imágenes</a></li>
+      <li><a href="#schema">Modelo de datos completo (SQL)</a></li>
+      <li><a href="#decisiones">Decisiones de diseño clave</a></li>
+      <li><a href="#impacto">Impacto sobre el sistema actual</a></li>
+      <li><a href="#ux">Flujo UX (cómo lo usa el negocio)</a></li>
+      <li><a href="#preguntas">Preguntas pendientes</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== 1. RESUMEN ===== -->
+  <div id="resumen" class="section">
+    <div class="section-title">1. Resumen ejecutivo</div>
+
+    <div class="alert alert-verde">
+      <div class="alert-icon">✅</div>
+      <div class="alert-body">
+        <div class="alert-title">Qué se construye</div>
+        <div class="alert-desc">Tres capas nuevas sobre el producto: (a) categorías jerárquicas globales para clasificar tipo de producto, (b) atributos globales con valores predefinidos como sistema (tallas, colores), y (c) variantes por producto = combinación de valores que tiene stock propio e imagen propia.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-naranja">
+      <div class="alert-icon">⚡</div>
+      <div class="alert-body">
+        <div class="alert-title">Por qué global y no por negocio</div>
+        <div class="alert-desc">Adifnex es SaaS. Si cada negocio crea sus propias tallas, habrá 50 formas distintas de escribir "XL". Estandarizar en el sistema permite filtros cruzados, reportes y consistencia. El negocio solo <strong>elige</strong> qué valores aplica a su producto — no los crea.</div>
+      </div>
+    </div>
+
+    <div class="impacto-grid" style="margin-top:1rem;">
+      <div class="impacto-card">
+        <div class="ico">🗂️</div>
+        <div class="val">~5 niveles</div>
+        <div class="lbl">Árbol de categorías</div>
+      </div>
+      <div class="impacto-card">
+        <div class="ico">🏷️</div>
+        <div class="val">~8 tipos</div>
+        <div class="lbl">Tipos de atributo</div>
+      </div>
+      <div class="impacto-card">
+        <div class="ico">📦</div>
+        <div class="val">~90+ valores</div>
+        <div class="lbl">Valores de atributo (seeds)</div>
+      </div>
+      <div class="impacto-card">
+        <div class="ico">🗃️</div>
+        <div class="val">8 tablas nuevas</div>
+        <div class="lbl">Migraciones SQL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 2. CATEGORÍAS ===== -->
+  <div id="categorias" class="section">
+    <div class="section-title">2. Sistema de categorías (árbol jerárquico)</div>
+
+    <div class="alert alert-azul">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-body">
+        <div class="alert-title">Diferencia con las etiquetas actuales</div>
+        <div class="alert-desc">Las <strong>etiquetas</strong> actuales son planas (flat), por negocio, con color — son como tags libres. Las <strong>categorías</strong> son un árbol jerárquico global del sistema, con propósito de clasificación estructurada. Ambas conviven.</div>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Árbol propuesto (seed inicial del sistema)</div>
+
+    <div class="card">
+      <div class="grid-2">
+        <div>
+          <div class="tree">
+            <div class="tree-root">📦 Ropa</div>
+            <div style="padding-left:1.5rem">
+              <div class="tree-l1">👗 Ropa de Mujer</div>
+              <div style="padding-left:1.5rem">
+                <div class="tree-l2">🧥 Ropa exterior</div>
+                <div class="tree-l2">👙 Ropa interior</div>
+                <div class="tree-l2">🩱 Trajes de baño</div>
+              </div>
+              <div class="tree-l1">👦 Ropa de Hombre</div>
+              <div style="padding-left:1.5rem">
+                <div class="tree-l2">🧥 Ropa exterior</div>
+                <div class="tree-l2">🩲 Ropa interior</div>
+              </div>
+              <div class="tree-l1">🧒 Ropa de Niño</div>
+              <div style="padding-left:1.5rem">
+                <div class="tree-l2">👕 Niño (2–14 años)</div>
+                <div class="tree-l2">👶 Bebé (0–24 meses)</div>
+                <div class="tree-l3">↳ RN, 1M, 2M, 3M, 6M, 9M, 12M, 18M, 24M</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="tree">
+            <div class="tree-root">👟 Calzado</div>
+            <div style="padding-left:1.5rem">
+              <div class="tree-l1">👠 Calzado Mujer</div>
+              <div class="tree-l1">👞 Calzado Hombre</div>
+              <div class="tree-l1">👧 Calzado Niño</div>
+              <div class="tree-l1">👶 Calzado Bebé</div>
+            </div>
+            <div class="tree-root" style="margin-top:0.75rem">📐 Otros</div>
+            <div style="padding-left:1.5rem">
+              <div class="tree-l1">📦 Accesorios</div>
+              <div class="tree-l1">🎒 Bolsos y mochilas</div>
+              <div class="tree-l1">📐 Productos con dimensiones</div>
+              <div class="tree-l1">⚙️ Sin categoría</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gris-200); font-size: 0.8rem; color: var(--gris-600);">
+        💡 <strong>Clave:</strong> Cada categoría lleva un <code>padre_id</code> nullable. Un producto puede asociarse a una categoría hoja (Ropa interior de Mujer). Al elegirla, el sistema <strong>sugiere automáticamente</strong> los tipos de atributo relevantes (ej: talla ropa + color).
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 3. VARIANTES / ATRIBUTOS ===== -->
+  <div id="variantes" class="section">
+    <div class="section-title">3. Sistema de variantes (atributos + valores)</div>
+
+    <p style="font-size:0.9rem; color:var(--gris-600); margin-bottom:1rem;">Los <strong>atributos</strong> son propiedades que puede tener un producto (Talla, Color). Los <strong>valores</strong> son las opciones concretas (XS, M, Rojo). Todo es global del sistema — seed.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de atributo</th>
+            <th>Categorías que lo usan</th>
+            <th>Valores (seed)</th>
+            <th>¿Afecta imagen?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-verde">Talla ropa adulto</span></td>
+            <td>Ropa Mujer, Ropa Hombre, Accesorios</td>
+            <td><code>XS · S · M · L · XL · XXL · XXXL</code></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-verde">Talla ropa niño</span></td>
+            <td>Ropa Niño (2–14 años)</td>
+            <td><code>2 · 4 · 6 · 8 · 10 · 12 · 14</code> (años)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-verde">Talla bebé</span></td>
+            <td>Ropa Bebé</td>
+            <td><code>RN · 1M · 2M · 3M · 6M · 9M · 12M · 18M · 24M</code></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-azul">Talla calzado adulto</span></td>
+            <td>Calzado Mujer, Calzado Hombre</td>
+            <td><code>34 · 35 · 36 · 37 · 38 · 39 · 40 · 41 · 42 · 43 · 44 · 45</code></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-azul">Talla calzado niño</span></td>
+            <td>Calzado Niño, Calzado Bebé</td>
+            <td><code>18 · 19 · 20 · 21 · 22 · 23 · 24 · 25 · 26 · 27 · 28 · 29 · 30 · 31 · 32 · 33</code></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-naranja">Color</span></td>
+            <td>Todas</td>
+            <td><code>Blanco #FFFFFF · Negro #000000 · Rojo #EF4444 · Azul #3B82F6 · Verde #22C55E · Amarillo #EAB308 · Rosa #EC4899 · Gris #6B7280 · Naranja #F97316 · Beige #F5F5DC · Marrón #92400E · Celeste #38BDF8</code></td>
+            <td>✅ Sí</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-violeta">Dimensión</span></td>
+            <td>Productos con dimensiones</td>
+            <td>Ancho × Alto × Profundidad (texto libre en cm)</td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-subtitle">Cómo funciona en la práctica</div>
+    <div class="card">
+      <p style="font-size:0.875rem; margin-bottom:1rem;">Un negocio vende <strong>Polo Blanco Básico</strong>. Al crear el producto:</p>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-label">Elige categoría</div>
+          <div class="flow-sub">Ropa Hombre → Ropa exterior</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-label">Sistema sugiere atributos</div>
+          <div class="flow-sub">Talla ropa adulto + Color</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-label">Negocio activa atributos</div>
+          <div class="flow-sub">Confirma o descarta los sugeridos</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-label">Elige valores disponibles</div>
+          <div class="flow-sub">Tallas: S, M, L, XL. Colores: Blanco, Negro</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-label">Se generan variantes</div>
+          <div class="flow-sub">S-Blanco, S-Negro, M-Blanco… (8 variantes)</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-label">Stock por variante</div>
+          <div class="flow-sub">Cuántas unidades de cada combinación</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4. STOCK ===== -->
+  <div id="stock" class="section">
+    <div class="section-title">4. Stock por variante</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--rojo-light); color:var(--rojo);">📦</div>
+          <div>
+            <div class="card-title">Stock actual (sin variantes)</div>
+            <div class="card-subtitle">Tabla: stock_sede</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Producto</th><th>Sede</th><th>Stock</th></tr></thead>
+            <tbody>
+              <tr><td>Polo Básico</td><td>Sede Lima</td><td>50</td></tr>
+              <tr><td>Polo Básico</td><td>Sede Callao</td><td>30</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.75rem; color:var(--rojo); margin-top:0.75rem;">❌ No distingue si quedan tallas M o XL</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--verde-light); color:var(--verde-dark);">📊</div>
+          <div>
+            <div class="card-title">Stock propuesto (con variantes)</div>
+            <div class="card-subtitle">Tabla: stock_variante_sede</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Variante</th><th>Sede</th><th>Stock</th></tr></thead>
+            <tbody>
+              <tr><td>Polo — M · Blanco</td><td>Lima</td><td>12</td></tr>
+              <tr><td>Polo — M · Negro</td><td>Lima</td><td>8</td></tr>
+              <tr><td>Polo — L · Blanco</td><td>Lima</td><td>5</td></tr>
+              <tr><td>Polo — XL · Negro</td><td>Callao</td><td>3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.75rem; color:var(--verde-dark); margin-top:0.75rem;">✅ Precisión total. Filtrar "¿hay talla M disponible?" es una query directa.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-naranja" style="margin-top:1rem;">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <div class="alert-title">Impacto en movimientos de inventario</div>
+        <div class="alert-desc">Ingresos y salidas deben incluir <code>variante_id</code>. Las transferencias entre sedes también. El historial de movimientos gana una columna nueva. <strong>Los productos actuales sin variantes siguen usando stock_sede normal</strong> — no se rompe nada.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 5. COLORES E IMÁGENES ===== -->
+  <div id="colores-imagenes" class="section">
+    <div class="section-title">5. Colores + imágenes por color</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--naranja-light); color:var(--naranja);">🎨</div>
+          <div>
+            <div class="card-title">Cómo funciona</div>
+          </div>
+        </div>
+        <ol style="padding-left:1.2rem; font-size:0.875rem; line-height:2;">
+          <li>Al configurar el atributo <strong>Color</strong> en un producto, el negocio elige los colores disponibles.</li>
+          <li>Para cada color elegido, puede subir una imagen.</li>
+          <li>En el catálogo público, el cliente selecciona el color → la imagen principal cambia automáticamente.</li>
+          <li>Si un color no tiene imagen propia, se muestra la imagen principal del producto.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--violeta-light); color:var(--violeta);">🗄️</div>
+          <div>
+            <div class="card-title">Relación en BD</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>producto_id</th><th>color_valor_id</th><th>imagen_url</th><th>es_principal</th></tr></thead>
+            <tbody>
+              <tr><td>42</td><td>Blanco</td><td>polo-blanco.jpg</td><td>✅</td></tr>
+              <tr><td>42</td><td>Negro</td><td>polo-negro.jpg</td><td>❌</td></tr>
+              <tr><td>42</td><td>Rojo</td><td><em>null</em></td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.75rem; color:var(--gris-400); margin-top:0.5rem;">Rojo usa la imagen principal al no tener propia.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 6. SCHEMA SQL ===== -->
+  <div id="schema" class="section">
+    <div class="section-title">6. Modelo de datos completo (SQL)</div>
+
+    <div class="alert alert-violeta" style="margin-bottom:1rem;">
+      <div class="alert-icon">💡</div>
+      <div class="alert-body">
+        <div class="alert-title">Enfoque de migración</div>
+        <div class="alert-desc">8 tablas nuevas. Ninguna tabla existente se modifica estructuralmente (producto, stock_sede, movimiento_inventario se mantienen). Solo se agregan relaciones opcionales. Los productos sin variantes siguen funcionando igual.</div>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Tabla: <code>categoria</code> — Árbol jerárquico global</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> categoria (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    nombre                <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">NOT NULL</span>,
+    padre_id              <span class="sql-type">BIGINT</span> <span class="sql-kw">REFERENCES</span> categoria(id),  <span class="sql-comment">-- null = raíz</span>
+    slug                  <span class="sql-type">VARCHAR(100)</span> <span class="sql-kw">UNIQUE NOT NULL</span>,   <span class="sql-comment">-- 'ropa-mujer-exterior'</span>
+    icono                 <span class="sql-type">VARCHAR(50)</span>,                     <span class="sql-comment">-- 'pi-shopping-bag'</span>
+    orden                 <span class="sql-type">INTEGER NOT NULL DEFAULT</span> <span class="sql-num">0</span>,
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    estado                <span class="sql-type">BOOLEAN NOT NULL DEFAULT true</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE INDEX</span> idx_categoria_padre <span class="sql-kw">ON</span> categoria(padre_id) <span class="sql-kw">WHERE</span> eliminado = false;</pre>
+
+    <div class="section-subtitle">Tabla: <code>atributo_tipo</code> — Tipos de atributo (global)</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> atributo_tipo (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    nombre                <span class="sql-type">VARCHAR(100) NOT NULL</span>,        <span class="sql-comment">-- 'Talla ropa adulto', 'Color'</span>
+    slug                  <span class="sql-type">VARCHAR(100) UNIQUE NOT NULL</span>,   <span class="sql-comment">-- 'talla-ropa-adulto', 'color'</span>
+    tipo_dato             <span class="sql-type">VARCHAR(20) NOT NULL</span>,          <span class="sql-comment">-- 'lista' | 'color' | 'texto' | 'numero'</span>
+    afecta_imagen         <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>,  <span class="sql-comment">-- true solo en Color</span>
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    estado                <span class="sql-type">BOOLEAN NOT NULL DEFAULT true</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);</pre>
+
+    <div class="section-subtitle">Tabla: <code>atributo_valor</code> — Valores de atributo (seed global)</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> atributo_valor (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    atributo_tipo_id      <span class="sql-type">BIGINT NOT NULL REFERENCES</span> atributo_tipo(id),
+    valor                 <span class="sql-type">VARCHAR(50) NOT NULL</span>,    <span class="sql-comment">-- 'XS', '35', '#EF4444'</span>
+    etiqueta              <span class="sql-type">VARCHAR(100)</span>,            <span class="sql-comment">-- 'Extra Small', 'Talla 35', 'Rojo'</span>
+    orden                 <span class="sql-type">INTEGER NOT NULL DEFAULT</span> <span class="sql-num">0</span>,
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    estado                <span class="sql-type">BOOLEAN NOT NULL DEFAULT true</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_atributo_valor <span class="sql-kw">ON</span> atributo_valor(atributo_tipo_id, valor);</pre>
+
+    <div class="section-subtitle">Tabla: <code>categoria_atributo_tipo</code> — Qué atributos sugiere cada categoría</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> categoria_atributo_tipo (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    categoria_id          <span class="sql-type">BIGINT NOT NULL REFERENCES</span> categoria(id),
+    atributo_tipo_id      <span class="sql-type">BIGINT NOT NULL REFERENCES</span> atributo_tipo(id),
+    requerido             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>,
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_cat_atrib <span class="sql-kw">ON</span> categoria_atributo_tipo(categoria_id, atributo_tipo_id);</pre>
+
+    <div class="section-subtitle">Tabla: <code>producto_categoria</code> — Categoría de cada producto</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> producto_categoria (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    producto_id           <span class="sql-type">BIGINT NOT NULL REFERENCES</span> producto(id),
+    categoria_id          <span class="sql-type">BIGINT NOT NULL REFERENCES</span> categoria(id),
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_prod_cat <span class="sql-kw">ON</span> producto_categoria(producto_id) <span class="sql-kw">WHERE</span> eliminado = false;
+<span class="sql-comment">-- Un producto pertenece a una sola categoría (hoja del árbol)</span></pre>
+
+    <div class="section-subtitle">Tabla: <code>producto_variante</code> — Combinación de valores para un producto</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> producto_variante (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    producto_id           <span class="sql-type">BIGINT NOT NULL REFERENCES</span> producto(id),
+    negocio_id            <span class="sql-type">BIGINT NOT NULL</span>,           <span class="sql-comment">-- tenant isolation</span>
+    sku_variante          <span class="sql-type">VARCHAR(150)</span>,              <span class="sql-comment">-- 'POLO-M-BL' (nullable, auto-generado)</span>
+    precio_override       <span class="sql-type">NUMERIC(10,2)</span>,             <span class="sql-comment">-- null = usa precio del producto base</span>
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    estado                <span class="sql-type">BOOLEAN NOT NULL DEFAULT true</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE INDEX</span> idx_variante_producto <span class="sql-kw">ON</span> producto_variante(producto_id, negocio_id) <span class="sql-kw">WHERE</span> eliminado = false;</pre>
+
+    <div class="section-subtitle">Tabla: <code>producto_variante_valor</code> — Qué valores tiene cada variante</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> producto_variante_valor (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    variante_id           <span class="sql-type">BIGINT NOT NULL REFERENCES</span> producto_variante(id),
+    atributo_valor_id     <span class="sql-type">BIGINT NOT NULL REFERENCES</span> atributo_valor(id),  <span class="sql-comment">-- ej: valor 'M' o 'Rojo'</span>
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_variante_valor <span class="sql-kw">ON</span> producto_variante_valor(variante_id, atributo_valor_id);</pre>
+
+    <div class="section-subtitle">Tabla: <code>producto_color_imagen</code> — Imagen por color de producto</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> producto_color_imagen (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    producto_id           <span class="sql-type">BIGINT NOT NULL REFERENCES</span> producto(id),
+    negocio_id            <span class="sql-type">BIGINT NOT NULL</span>,
+    atributo_valor_id     <span class="sql-type">BIGINT NOT NULL REFERENCES</span> atributo_valor(id),  <span class="sql-comment">-- debe ser de tipo color</span>
+    url_imagen            <span class="sql-type">VARCHAR(500) NOT NULL</span>,
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_prod_color_img <span class="sql-kw">ON</span> producto_color_imagen(producto_id, atributo_valor_id) <span class="sql-kw">WHERE</span> eliminado = false;</pre>
+
+    <div class="section-subtitle">Tabla: <code>stock_variante_sede</code> — Stock por variante y sede</div>
+    <pre><span class="sql-kw">CREATE TABLE</span> stock_variante_sede (
+    id                    <span class="sql-type">BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+    negocio_id            <span class="sql-type">BIGINT NOT NULL</span>,
+    variante_id           <span class="sql-type">BIGINT NOT NULL REFERENCES</span> producto_variante(id),
+    sede_id               <span class="sql-type">BIGINT NOT NULL REFERENCES</span> sede(id),
+    cantidad              <span class="sql-type">INTEGER NOT NULL DEFAULT</span> <span class="sql-num">0</span> <span class="sql-kw">CHECK</span> (cantidad >= <span class="sql-num">0</span>),
+    usuario_creacion      <span class="sql-type">BIGINT NOT NULL</span>,
+    usuario_actualizacion <span class="sql-type">BIGINT NOT NULL</span>,
+    fecha_creacion        <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    fecha_actualizacion   <span class="sql-type">TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP</span>,
+    eliminado             <span class="sql-type">BOOLEAN NOT NULL DEFAULT false</span>
+);
+<span class="sql-kw">CREATE UNIQUE INDEX</span> uq_stock_variante_sede <span class="sql-kw">ON</span> stock_variante_sede(variante_id, sede_id) <span class="sql-kw">WHERE</span> eliminado = false;</pre>
+
+    <div class="section-subtitle">Diagrama de relaciones</div>
+    <div class="card">
+      <pre style="background:white; color:var(--gris-800); border: 1px solid var(--gris-200); font-size:0.78rem; line-height:1.9;">
+[<span style="color:var(--verde-dark);font-weight:700">categoria</span>]  (árbol, global, seed)
+    └── tiene sugeridos → [<span style="color:var(--azul);font-weight:700">categoria_atributo_tipo</span>] → [<span style="color:var(--azul);font-weight:700">atributo_tipo</span>]
+                                                               └── tiene → [<span style="color:var(--azul);font-weight:700">atributo_valor</span>]
+
+[<span style="color:var(--naranja);font-weight:700">producto</span>] (por negocio, ya existe)
+    ├── pertenece a → [<span style="color:var(--verde-dark);font-weight:700">producto_categoria</span>] → categoria
+    ├── tiene variantes → [<span style="color:var(--naranja);font-weight:700">producto_variante</span>]
+    │                         └── combina valores → [<span style="color:var(--naranja);font-weight:700">producto_variante_valor</span>] → atributo_valor
+    ├── tiene imágenes por color → [<span style="color:var(--violeta);font-weight:700">producto_color_imagen</span>] → atributo_valor (color)
+    └── tiene imágenes generales → [producto_imagen] (ya existe)
+
+[<span style="color:var(--naranja);font-weight:700">producto_variante</span>]
+    └── tiene stock por sede → [<span style="color:var(--rojo);font-weight:700">stock_variante_sede</span>] → sede</pre>
+    </div>
+  </div>
+
+  <!-- ===== 7. DECISIONES ===== -->
+  <div id="decisiones" class="section">
+    <div class="section-title">7. Decisiones de diseño clave</div>
+
+    <div class="decision-card">
+      <div class="decision-header">🏗️ Decisión 1: ¿Un producto puede ser hijo de múltiples categorías?</div>
+      <div class="decision-body">
+        <div class="option">
+          <div class="option-label">A</div>
+          <div class="option-content">
+            <div class="option-title">Multi-categoría (N:M)</div>
+            <div class="option-desc">Un polo puede estar en "Ropa Hombre" y "Ropa Unisex". Más flexible, queries complejas.</div>
+          </div>
+        </div>
+        <div class="option recommended">
+          <div class="option-label">B</div>
+          <div class="option-content">
+            <div class="option-title">Una sola categoría (hoja) <span class="rec-badge">RECOMENDADO</span></div>
+            <div class="option-desc">Más simple. Si quieren multi-categoría, las etiquetas actuales ya lo resuelven. Categoría = clasificación principal para sugerir atributos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">📐 Decisión 2: ¿Cómo se genera el SKU de una variante?</div>
+      <div class="decision-body">
+        <div class="option recommended">
+          <div class="option-label">A</div>
+          <div class="option-content">
+            <div class="option-title">Auto-generado por el sistema <span class="rec-badge">RECOMENDADO</span></div>
+            <div class="option-desc">El sistema concatena el SKU base del producto + las iniciales de los valores: <code>POLO001-M-BL</code>. El negocio puede editarlo manualmente si quiere.</div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-label">B</div>
+          <div class="option-content">
+            <div class="option-title">Manual (el negocio ingresa cada SKU)</div>
+            <div class="option-desc">Máximo control, pero carga de trabajo alta si hay 20 variantes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">💰 Decisión 3: ¿El precio varía por variante?</div>
+      <div class="decision-body">
+        <div class="option recommended">
+          <div class="option-label">A</div>
+          <div class="option-content">
+            <div class="option-title">Precio base en producto + override opcional por variante <span class="rec-badge">RECOMENDADO</span></div>
+            <div class="option-desc">La columna <code>precio_override</code> en <code>producto_variante</code> es nullable. Si es null, hereda el precio del producto. Ropa talla XL puede costar S/2 más. Simple de implementar y escala bien.</div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-label">B</div>
+          <div class="option-content">
+            <div class="option-title">Precio obligatorio en cada variante</div>
+            <div class="option-desc">Más preciso pero obliga al negocio a ingresar precio en cada una de las N variantes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">🌐 Decisión 4: ¿Los negocios pueden agregar sus propias categorías?</div>
+      <div class="decision-body">
+        <div class="option">
+          <div class="option-label">A</div>
+          <div class="option-content">
+            <div class="option-title">Solo el sistema administra categorías (solo SUPERADMIN)</div>
+            <div class="option-desc">Máxima estandarización. Requiere más curaduría del árbol inicial.</div>
+          </div>
+        </div>
+        <div class="option recommended">
+          <div class="option-label">B</div>
+          <div class="option-content">
+            <div class="option-title">Sistema + negocio puede agregar subcategorías propias <span class="rec-badge">RECOMENDADO</span></div>
+            <div class="option-desc">Las raíces son del sistema. Un negocio puede crear "Ropa de trabajo" bajo "Ropa Hombre" si lo necesita. Columna <code>negocio_id</code> nullable en <code>categoria</code> — null = global.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">📦 Decisión 5: ¿Qué pasa con productos existentes (sin variantes)?</div>
+      <div class="decision-body">
+        <div class="option recommended">
+          <div class="option-label">A</div>
+          <div class="option-content">
+            <div class="option-title">Coexistencia — variantes son opcionales <span class="rec-badge">RECOMENDADO</span></div>
+            <div class="option-desc">Los productos actuales siguen usando <code>stock_sede</code>. Si el negocio quiere variantes, las configura y el sistema usa <code>stock_variante_sede</code>. Migración no destructiva, sin romper nada.</div>
+          </div>
+        </div>
+        <div class="option">
+          <div class="option-label">B</div>
+          <div class="option-content">
+            <div class="option-title">Migración forzada — todos los productos generan variante base</div>
+            <div class="option-desc">Unifor el modelo pero requiere migrar datos existentes y adaptar todos los endpoints. Mayor riesgo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 8. IMPACTO ===== -->
+  <div id="impacto" class="section">
+    <div class="section-title">8. Impacto sobre el sistema actual</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--rojo-light); color:var(--rojo);">⚠️</div>
+          <div><div class="card-title">Módulos afectados (requieren cambios)</div></div>
+        </div>
+        <div class="affected">
+          <span class="chip chip-rojo">ProductosModulo — form crear/editar</span>
+          <span class="chip chip-rojo">StockModulo — movimientos y transferencias</span>
+          <span class="chip chip-amarillo">MovimientosModulo — incluir variante_id</span>
+          <span class="chip chip-amarillo">CatalogoPublico — mostrar variantes + cambio imagen</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--verde-light); color:var(--verde-dark);">✅</div>
+          <div><div class="card-title">Módulos sin cambios</div></div>
+        </div>
+        <div class="affected">
+          <span class="chip chip-verde">AutenticacionModulo</span>
+          <span class="chip chip-verde">MarcasModulo</span>
+          <span class="chip chip-verde">EtiquetasModulo</span>
+          <span class="chip chip-verde">SedesModulo</span>
+          <span class="chip chip-verde">NegocioModulo</span>
+          <span class="chip chip-verde">RBAC / Permisos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Nuevos módulos a crear</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background:var(--verde-light); color:var(--verde-dark); margin-bottom:0.5rem;">🗂️</div>
+        <div class="card-title">CategoriasModulo</div>
+        <p style="font-size:0.8rem; color:var(--gris-600); margin-top:0.3rem;">CRUD árbol + endpoints públicos para listar árbol. Solo SUPERADMIN crea categorías raíz.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:var(--azul-light); color:var(--azul); margin-bottom:0.5rem;">🏷️</div>
+        <div class="card-title">AtributosModulo</div>
+        <p style="font-size:0.8rem; color:var(--gris-600); margin-top:0.3rem;">CRUD tipos + valores. Read-only para negocios. SUPERADMIN administra. Seeds automáticos.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:var(--naranja-light); color:var(--naranja); margin-bottom:0.5rem;">📦</div>
+        <div class="card-title">VariantesModulo</div>
+        <p style="font-size:0.8rem; color:var(--gris-600); margin-top:0.3rem;">Configurar variantes por producto. Stock por variante. Imágenes por color.</p>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Nuevos permisos sugeridos</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Permiso</th><th>Sección</th><th>Quién</th></tr></thead>
+        <tbody>
+          <tr><td><code>CATALOGO_CATEGORIAS_VER</code></td><td>CATALOGO</td><td>Todos los planes</td></tr>
+          <tr><td><code>CATALOGO_CATEGORIAS_EDITAR</code></td><td>CATALOGO</td><td>Solo SUPERADMIN</td></tr>
+          <tr><td><code>INVENTARIO_VARIANTES_VER</code></td><td>INVENTARIO</td><td>Plan básico+</td></tr>
+          <tr><td><code>INVENTARIO_VARIANTES_EDITAR</code></td><td>INVENTARIO</td><td>Plan básico+</td></tr>
+          <tr><td><code>INVENTARIO_ATRIBUTOS_ADMIN</code></td><td>INVENTARIO</td><td>Solo SUPERADMIN</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 9. UX FLOW ===== -->
+  <div id="ux" class="section">
+    <div class="section-title">9. Flujo UX — Cómo lo usa el negocio</div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--verde-light); color:var(--verde-dark);">➕</div>
+        <div><div class="card-title">Crear un producto con variantes (Nuevo flujo)</div></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">1</div>
+          <div><strong>Datos básicos del producto</strong> — igual que ahora (nombre, SKU base, descripción, marca, precio base)</div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">2</div>
+          <div><strong>Elegir categoría</strong> — dropdown con árbol. Al elegir "Ropa Mujer — Exterior", el sistema muestra <em>Atributos sugeridos: Talla ropa adulto, Color.</em></div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">3</div>
+          <div><strong>Configurar atributos</strong> — el negocio selecciona cuáles valores aplican: Talla: [S, M, L, XL]. Color: [Blanco, Negro, Rojo]. El sistema genera la matriz de variantes automáticamente (S×Blanco, S×Negro… = 12 variantes).</div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">4</div>
+          <div><strong>Subir imágenes por color</strong> — para cada color elegido, puede subir una imagen. Si no sube, hereda la imagen principal del producto.</div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">5</div>
+          <div><strong>Stock por variante</strong> — tabla editable mostrando cada variante generada. El negocio puede ingresar el stock inicial de cada combinación (por sede si aplica).</div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start; padding:0.75rem; border:1px solid var(--gris-200); border-radius:8px;">
+          <div style="background:var(--verde); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">6</div>
+          <div><strong>Precio por variante (opcional)</strong> — si alguna talla o color tiene precio diferente, puede sobreescribirlo. Si no, hereda el precio base.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:var(--violeta-light); color:var(--violeta);">🔍</div>
+        <div><div class="card-title">Filtrar por talla en el inventario</div></div>
+      </div>
+      <p style="font-size:0.875rem;">En la lista de productos, un nuevo filtro <strong>"Talla"</strong> permitirá escribir o elegir "M" y ver todos los productos que tienen stock en talla M. La query navega: <code>atributo_valor (M) → producto_variante_valor → producto_variante → stock_variante_sede</code>. Resultado: todos los productos donde hay talla M con stock > 0.</p>
+    </div>
+  </div>
+
+  <!-- ===== 10. PREGUNTAS ===== -->
+  <div id="preguntas" class="section">
+    <div class="section-title">10. Preguntas pendientes</div>
+
+    <p style="font-size:0.875rem; color:var(--gris-600); margin-bottom:1rem;">Antes de empezar a construir, necesito confirmar estas decisiones contigo:</p>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">1. ¿Los productos pueden estar en solo 1 categoría o en múltiples?</div>
+        <div class="question-context">Mi recomendación: 1 sola (hoja del árbol). Para clasificación adicional, usar las etiquetas que ya existen.</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">2. ¿Se maneja stock por variante (talla+color) POR SEDE, o un stock total del negocio?</div>
+        <div class="question-context">El sistema actual ya tiene stock por sede. Lo natural es extenderlo: stock de "Polo M Rojo" en Lima = 5, en Callao = 3. ¿Confirmas este nivel de granularidad?</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">3. ¿Las etiquetas actuales (planas, por negocio) conviven o las reemplazamos con categorías?</div>
+        <div class="question-context">Mi recomendación: conviven. Categorías = clasificación principal (árbol global). Etiquetas = tags libres del negocio (ej: "Temporada verano 2026", "Liquidación").</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">4. ¿El catálogo público de Next.js debe mostrar el selector de variantes (talla/color) con cambio de imagen?</div>
+        <div class="question-context">Asumo que sí, ya que lo mencionaste. ¿Es parte de este sprint o se planifica después?</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">5. ¿Los movimientos de inventario (INGRESO/SALIDA) siempre requerirán especificar variante, o solo cuando el producto tenga variantes configuradas?</div>
+        <div class="question-context">Mi recomendación: condicional. Si el producto tiene variantes, el movimiento DEBE incluir variante_id. Si no, usa el flujo actual.</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">6. ¿Necesitas que el sistema genere automáticamente TODAS las combinaciones de variantes, o el negocio las crea de a una?</div>
+        <div class="question-context">Ej: si elige tallas S, M, L y colores Blanco, Negro → ¿el sistema crea las 6 combinaciones automáticamente? Lo recomiendo, con opción de eliminar las que no existen (ej: "no tenemos XL en color Rojo").</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-num">❓</div>
+      <div>
+        <div class="question-text">7. ¿El negocio puede agregar colores o tallas que no están en el seed global?</div>
+        <div class="question-context">Ej: un negocio tiene una talla "Talla Única" o un color "Verde Esmeralda Oscuro". ¿Permitimos valores custom por negocio o solo los del sistema?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <hr />
+  <div style="text-align:center; color:var(--gris-400); font-size:0.8rem;">
+    Adifnex — Plan de Categorías y Variantes · Viernes · 2026-05-31
+  </div>
+
+</div>
+</body>
+</html>
