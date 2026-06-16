@@ -4,6 +4,69 @@ Registro cronológico de operaciones. Formato de entrada: `## [YYYY-MM-DD] tipo 
 
 Tipos: `init` | `ingest` | `query` | `lint` | `update`
 
+## [2026-06-16] update | venta-inventario — "Mi Página" rediseño premium con /premium-refactor | siguiente: nada pendiente
+
+- **Skill `/premium-refactor` aplicado**: creó duplicado `mi-pagina-v2/` sin tocar el original → aprobado → `mi-pagina-v2` mergeado a `mi-pagina/`, carpeta v2 eliminada, panel limpiado.
+- **Tab nav custom** (sin `MatTabsModule`): 4 tabs con `signal<string>('identidad')` + `@switch (tabActiva())`. Tabs: Identidad · Contacto · SEO · Plantilla.
+- **Full-height split-pane**: `form-col` (38%) + `preview-col` (flex:1). Patrón `browser-wrap → browser-frame → preview-products-placeholder (flex:1)` para que el browser llene la altura disponible sin scroll de página.
+- **Gotcha layout resuelto**: `max-width: 480px; margin: 0 auto` dentro de `flex:1` (~930px) dejaba ~225px blancos a cada lado. Fix: eliminar max-width, todo flex:1.
+- **Selector de plantilla**: miniatura CSS-only de cada plantilla (~84px) sin imágenes externas.
+- `venta-inventario-catalogo.md` actualizado: sección F6 reescrita con diseño actual.
+- `venta-inventario-frontend-diseno.md` actualizado: nuevo patrón "full-height split-pane" + gotcha max-width.
+
+## [2026-06-16] update | venta-inventario-catalogo — Hero + Newsletter eliminados de toda la plataforma | siguiente: primera carga real de productos
+
+- **Decisión de diseño**: pantallas de catálogo no necesitan Hero en esta primera versión. Se eliminó por completo.
+- **DB**: tabla `pagina_hero_imagen` eliminada, columnas `hero_*` + `footer_newsletter` de `negocio_pagina_config`, `max_imagenes_hero` de `negocio`. Migración `009-eliminar-hero-newsletter.sql` creada.
+- **Backend**: entidad eliminada, 4 endpoints hero eliminados del controlador, servicio limpio sin métodos hero, módulo sin `PaginaHeroImagen`, DTOs sin campos hero/newsletter, `ConfigPublicaDto` sin `ImagenHeroPublicaDto`.
+- **Frontend Angular**: tab Hero eliminado de `mi-pagina`, toggle newsletter eliminado, preview hero/newsletter eliminados, interfaz `ImagenHero` y métodos de servicio eliminados. Tarjeta `maxImagenesHero` en `mi-negocio-vista` eliminada.
+- **Catálogo React**: `HeroBanner.tsx` de ambas plantillas eliminado. `types.ts` sin `ImagenHero` ni campos hero. `mock-data.ts` sin datos hero/newsletter. Fallback SEO description: `config.heroSubtitulo` → `config.nombrePublico`.
+- `venta-inventario-catalogo.md` actualizado: nueva sección "Refactor 2026-06-16", plantillas anotadas como "sin hero".
+
+## [2026-06-12] update | venta-inventario — Refactor A COMPLETO: etiquetas eliminadas | siguiente: Refactor B (marcas globales + máx 3 propias)
+
+- **Refactor A ejecutado** — sistema de etiquetas eliminado por completo del proyecto.
+- **BD**: migración `027-eliminar-etiquetas.sql` (idempotente). `DROP TABLE producto_etiqueta; DROP TABLE etiqueta;`. Removidas columnas `max_etiquetas` (tabla `negocio`) y `max_etiquetas_por_negocio` (tabla `configuracion_sistema`). Eliminados permisos `INVENTARIO_ETIQUETAS_*` y sección `INVENTARIO_ETIQUETAS`. `setup-completo.sql` actualizado.
+- **Backend**: carpeta `inventario/etiquetas/` eliminada. Entidades `Etiqueta`/`ProductoEtiqueta` removidas de `productos.modulo.ts`, `productos.servicio.ts`, `productos.entidad.ts`, `publico.modulo.ts`, `publico.servicio.ts`. Columnas `maxEtiquetas`/`maxEtiquetasPorNegocio` removidas de entidades `Negocio` y `ConfiguracionSistema`. Campo `maxEtiquetas` removido de `crear-negocio.dto.ts`. `tsc --noEmit` limpio.
+- **Frontend Angular**: `etiquetas-lista/` eliminada, `etiquetas-inventario.servicio.ts` eliminado. Ítem "Etiquetas" removido del sidebar. Columnas/chips de etiquetas removidos de `productos-premium`. Referencias removidas de `panel.component`, `negocio.servicio`, `negocios-lista`, `mi-negocio-vista`. `sugerirSku()` migrado a `productos-inventario.servicio.ts` (estaba mal ubicado en etiquetas).
+- **E2E**: `e2e/tests/12-etiquetas/` + `e2e/pages/etiquetas.page.ts` eliminados.
+- **`publico.servicio.ts`**: `obtenerCategorias()` retorna `[]` temporalmente (etiquetas eran los "filtros"; categorías reales = Fase 2).
+- Handoff `docs/planes/handoff-construccion.md` actualizado: Refactor A ✅, siguiente = B, próxima migración = **028**.
+- Commit sugerido (pendiente OK Christian): `refactor: eliminar sistema de etiquetas completo (migración 027)`
+
+## [2026-06-11] update | venta-inventario-variantes — descriptivos por contexto + árbol multi-rubro + handoff Sonnet | siguiente: refactors (etiquetas/marcas/descuento) → Fase 2
+
+- **Construcción ACTIVA** — el modelo de negocio quedó 100% cerrado; pasa a fase de implementación (la ejecutará el agente Sonnet).
+- **Descriptivos SEPARADOS POR CONTEXTO** (decisión nueva): no hay un "Material" único — se separa por rubro (`material-textil`, `material-mueble`, `material-juguete`) igual que las tallas. Cada categoría sugiere los suyos vía `categoria_atributo_tipo`. Más descriptivos por rubro: `edad-recomendada` (juguetes), `tipo-piel` (belleza), `etapa-vida` (mascotas). **Seed de descriptivos se carga al final.**
+- **Árbol de categorías: 3 niveles consistentes (estilo Ripley) + multi-rubro amplio.** Producto en la hoja (nivel 3), enlazado hacia arriba por `padre_id`. Christian entregará la data real (capturas Ripley); Claude solo estandariza, NO inventa. Columnas "Marcas" de Ripley → seed de marcas, no categorías.
+- **Documentos creados:** `docs/planes/handoff-construccion.md` (guía completa para el agente constructor: reglas del proyecto, orden de tareas, qué NO hacer) + `docs/planes/arbol-categorias-propuesta.md` (formato destino del árbol).
+- **`venta-inventario-variantes.md`**: agregada sección "Estado de construcción — Fases" (tabla viva ✅/⏳/⏸️), concepto de atributos por contexto, árbol multi-rubro; estado → `en-construccion`.
+- **NUEVA REGLA OPERATIVA en `CLAUDE.md` de Viernes:** "Modo construcción — continuidad entre sesiones". Durante construcción activa, Viernes registra fases y lo puntual del avance, marca `en-construccion`, y solo cierra cuando Christian indique fin. Al despertar, mencionar que hay construcción en curso y en qué fase. → memoria [[feedback-modo-construccion]].
+
+## [2026-06-11] ingest | variantes — Fase 1 construida + modelo de negocio cerrado (todas las dudas resueltas)
+
+- **Fase 1 implementada** (backend): migración 026 (4 tablas categoria/atributo_tipo/atributo_valor/categoria_atributo_tipo + seeds árbol/atributos/~100 valores/sugerencias + permisos INVENTARIO_CATEGORIAS/ATRIBUTOS), setup-completo.sql actualizado, CategoriasModulo + AtributosModulo (servicio/controlador/DTOs/entidades), 21 unit tests verde, typecheck limpio
+- Patrón seguido: igual a MarcasModulo. Categorías globales (negocio_id NULL) read-only; negocio crea subcategorías propias. Slug auto `-n{negocioId}`
+- **Modelo de negocio cerrado** — sesión de resolución total de dudas. Decisiones nuevas/cambiadas:
+  - **Precio ÚNICO global** por producto (NO varía por talla/color) → se elimina `precio_override`
+  - **Descuento con vigencia obligatoria máx 15 días** (anti-abuso del "descuento eterno"); badge solo si vigente
+  - **Stock variante = total del negocio** (`stock_variante`, sin sede); excluyente; total = suma de variantes; sede de variantes = fase carrito
+  - **Etiquetas se eliminan** (categorías+facetas+marcas las reemplazan)
+  - **Marcas → globales + máx 3 propias** por negocio (mismo patrón que categorías); seed de marcas ropa/calzado pendiente de entregar
+  - Imagen: galería general + override por color · Variantes: categoría sugiere tallas (editable) · Categoría opcional al crear · Movimientos condicionales · Generación automática de combinaciones
+- Plan `plan-variantes-categorias.md` actualizado (sección 10 tabla maestra de decisiones + sección 12 cambios al modelo + descuento). HTML pendiente de sincronizar
+- `venta-inventario-variantes.md` actualizado con decisiones finales
+
+## [2026-06-11] ingest | plan categorías + variantes de producto — sub-página nueva + plan en fases
+
+- Plan `docs/planes/plan-variantes-categorias.{md,html}` evaluado y ampliado: MD generado desde el HTML + 4 secciones nuevas
+- **Concepto clave**: dos clases de atributo — generadores (`genera_variante=true`: Talla, Color) vs descriptivos (`false`: Material, Género, Temporada = facetas de catálogo)
+- **9 tablas nuevas** (agregada `producto_atributo_descriptivo`); Dimensión descartada
+- **Decisiones tomadas**: 1 foto/color, facetas Material/Género/Temporada, categoría visible si tiene producto visible, futuro carrito → variante = unidad de venta
+- **Sección 11 nueva**: catálogo público — reparto backend (NestJS) vs `catalogo-react` (Next.js); árbol filtrado por negocio, facetas, stock agregado, endpoints públicos
+- **Decisión orden**: se elimina `orden_catalogo` (BD+backend+frontend+catálogo) → reemplazo por flag `destacado` + orden automático
+- Página nueva `venta-inventario-variantes.md`; hub e index actualizados
+
 ## [2026-06-07] restructure | venta-inventario-frontend.md dividido en 11 sub-páginas atómicas — 2217 líneas → ~100 líneas/archivo
 
 - Hub reemplazado con stack, estado actual y WikiLinks

@@ -3,7 +3,7 @@ titulo: Venta e Inventario — Catálogo Público Multi-Negocio (adifnex-catalog
 tipo: proyecto
 tags: [catalogo, nextjs, react, tailwind, landing, multi-negocio, plan2, permisos, adifnex]
 fecha_creacion: 2026-05-15
-fecha_actualizacion: 2026-05-24-s13
+fecha_actualizacion: 2026-06-16
 estado: activo
 ---
 
@@ -36,8 +36,8 @@ Una plantilla **NO es un cambio de colores**. Es un **diseño completamente dist
 
 Plantillas activas:
 
-- `catalogo-grilla` — mint #366758, crema #fbf9f5, Quicksand + Nunito Sans, borders pill-shape, hero solo desktop, filtros en navbar (chips horizontales)
-- `catalogo-esencias` ✅ 2026-05-24 — dorado #b8975c, ivory #f7f3ee, espresso #1a1209, Playfair Display + Nunito Sans, sidebar filtros a la izquierda, imagen vertical 3:4
+- `catalogo-grilla` — mint #366758, crema #fbf9f5, Quicksand + Nunito Sans, borders pill-shape, **sin hero** (eliminado 2026-06-16), filtros en navbar (chips horizontales)
+- `catalogo-esencias` ✅ 2026-05-24 — dorado #b8975c, ivory #f7f3ee, espresso #1a1209, Playfair Display + Nunito Sans, sidebar filtros a la izquierda, imagen vertical 3:4, **sin hero** (eliminado 2026-06-16)
 
 ## Selección de plantilla — mecanismo
 
@@ -129,11 +129,43 @@ Patrón THEME: colores del template viven en `templates/catalogo-grilla/theme.ts
 
 `app/[slug]/page.tsx` ya no tiene `switch(layoutTemplate)` — siempre renderiza `CatalogoGrilla`. La selección de plantilla se hará en una fase futura cuando haya más de una.
 
-## Panel Angular "Mi Página" — F6 ✅
+## Panel Angular "Mi Página" — F6 ✅ (rediseño premium 2026-06-16)
 
-Ruta en panel: `/dashboard/mi-pagina`. Vista split-pane:
-- **Izquierda**: formulario con 4 tabs PrimeNG (`p-tabView`): Identidad, Hero, Contacto, SEO.
-- **Derecha** (solo lg+): preview vivo reactivo con signal `previewData` — se actualiza con `form.valueChanges`.
+Ruta en panel: `/dashboard/mi-pagina`. Vista split-pane full-height (sin scroll de página).
+
+**Diseño actual (post-premium-refactor)**:
+- **Izquierda** (`form-col`, 38% del ancho): tab nav custom + formulario reactivo con 4 secciones.
+- **Derecha** (`preview-col`, `flex:1`): browser mockup que llena toda la altura disponible.
+
+**Tabs actuales** (custom nav — sin MatTabsModule, con `@switch (tabActiva())`):
+| Key | Ícono | Contenido |
+|---|---|---|
+| `identidad` | `storefront` | Nombre público, slug, logo, favicon, toggle publicar |
+| `contacto` | `contact_phone` | WhatsApp, email, dirección, horario, redes sociales, desc. footer |
+| `seo` | `search` | Meta título, meta descripción (contador 0/160) |
+| `plantilla` | `palette` | Selección visual: Grilla vs Esencias (cards con mini-preview CSS-only) |
+
+**Layout CSS — cadena full-height**:
+```css
+/* panel.component.css */
+.view-area.view-mi-pagina { overflow: hidden; display: flex; flex-direction: column; padding: 0; }
+
+/* mi-pagina.component.css */
+:host { flex:1; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+.shell { flex:1; display:flex; flex-direction:column; min-height:0; }
+.body  { flex:1; min-height:0; display:flex; overflow:hidden; }
+.form-col   { min-width:340px; width:38%; max-width:440px; flex-shrink:0; display:flex; flex-direction:column; }
+.preview-col { flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; }
+.browser-wrap { flex:1; min-height:0; display:flex; flex-direction:column; }  /* ← clave */
+.browser-frame { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.preview-products-placeholder { flex:1; } /* ← crece entre navbar y footer */
+```
+
+**Gotcha resuelto — espacio vacío en preview**: La causa era `preview-col-inner` con `max-width: 480px; margin: 0 auto` dentro de un `flex:1` de ~930px. Dejaba ~225px en blanco a cada lado. Fix: eliminar el max-width, convertir a full flex column. Ver también [[venta-inventario-frontend-diseno]].
+
+**Browser mockup**: pestañas del navegador (`browser-tabs`) + viewport (`browser-frame`). El viewport muestra navbar del catálogo → placeholder productos → footer con 3 columnas. Todo reactivo via signal `previewData` (actualizado en `form.valueChanges`). Spotlight amarillo con `box-shadow: 0 0 0 2px #facc15` al pulsar el ícono de ojo de cada campo.
+
+**Selector de plantilla**: dos cards CSS-only que renderizan una miniatura en ~84px de alto sin imágenes — solo divs con colores hardcodeados de cada plantilla.
 
 Backend nuevos en `NegocioControlador`:
 ```
@@ -433,6 +465,35 @@ El componente `PaginaNoDisponible` aparece ante CUALQUIER error del try/catch en
 1. ¿Backend responde? → abrir `https://<backend>/api/pub/<slug>` directo en browser
 2. ¿Variable correcta en Vercel? → re-ingresar `NEXT_PUBLIC_API_URL` (es Sensitive, no se puede leer) → redeploy
 3. ¿Cold start? → despertar el backend manualmente → recargar catálogo inmediatamente
+
+## Refactor 2026-06-16 — Hero + Newsletter eliminados completamente
+
+**Decisión**: Hero y Newsletter no se usarán en el catálogo en esta primera versión. Se eliminaron de toda la plataforma (DB, backend, frontend Angular, catálogo React).
+
+### Qué se eliminó
+
+| Capa | Qué se borró |
+|---|---|
+| **DB** | Tabla `pagina_hero_imagen` completa · columnas `hero_titulo`, `hero_subtitulo`, `hero_cta_texto`, `hero_cta_url` (de `negocio_pagina_config`) · columna `footer_newsletter` · columna `max_imagenes_hero` (de `negocio`) · 2 índices hero |
+| **Backend** | Entidad `pagina-hero-imagen.entidad.ts` eliminada · 4 endpoints hero (POST/DELETE/PATCH orden/PATCH principal) del controlador · métodos hero en el servicio · `PaginaHeroImagen` removido del módulo · campos hero/newsletter de DTOs · `ImagenHeroPublicaDto` de config-publica.dto.ts |
+| **Frontend Angular** | Tab "Hero" completo del componente `mi-pagina` · toggle Newsletter · preview hero y preview newsletter · signal `imagenesHero` + `maxImagenesHero` · métodos `onHeroImagenSeleccionada`, `eliminarImagenHero`, `onDragDrop`, `marcarPrincipal` · interfaz `ImagenHero` del servicio · métodos de imagen hero del servicio · tarjeta "Max. imágenes hero" en `mi-negocio-vista` |
+| **Catálogo React** | Archivos `HeroBanner.tsx` de ambas plantillas · interfaz `ImagenHero` de `types.ts` · campos `heroTitulo/Subtitulo/CtaTexto/CtaUrl/imagenesHero/footerNewsletter` de `NegocioConfig` · mock data limpio |
+
+### Migración
+
+`database/migrations/009-eliminar-hero-newsletter.sql` — idempotente, con `DROP TABLE IF EXISTS` y `DROP COLUMN IF EXISTS`. Orden: 1) eliminar `pagina_hero_imagen` (tiene FK), 2) columnas hero de `negocio_pagina_config`, 3) `max_imagenes_hero` de `negocio`.
+
+### Reglas derivadas
+
+- **SEO metadata fallback**: `app/[slug]/page.tsx` usaba `config.heroSubtitulo` como fallback para `description`. Cambiado a `config.nombrePublico`.
+- **Plantillas sin hero**: ambas plantillas (`catalogo-grilla` y `catalogo-esencias`) arrancan directamente en la Navbar → Productos. No hay sección de bienvenida grande.
+- **`NegocioConfig` más limpia**: la interfaz ahora refleja exactamente lo que existe en BD. Sin campos muertos.
+
+### Panel "Mi Página" — tabs restantes
+
+Ahora solo quedan 4 tabs: **Identidad** · **Contacto** · **SEO** · **Plantilla**.
+
+---
 
 ## Links relacionados
 

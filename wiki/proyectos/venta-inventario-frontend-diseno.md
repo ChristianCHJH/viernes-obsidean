@@ -3,7 +3,7 @@ titulo: Frontend — Design System y CSS Global
 tipo: proyecto
 tags: [inventario, angular, design-system, adifnex, sidebar, tailwind, css]
 fecha_creacion: 2026-06-07
-fecha_actualizacion: 2026-06-07
+fecha_actualizacion: 2026-06-16
 estado: activo
 ---
 
@@ -95,6 +95,32 @@ view-area.view-VISTA (flex:1, overflow:hidden, flex column, padding:0)
 ```
 
 Implementado en `productos-premium` (referencia canónica) y `sedes-lista`.
+
+## Patrón full-height split-pane (form + preview) (2026-06-16)
+
+Extensión del patrón tablas full-height para vistas que tienen **formulario izquierda + preview derecha** (ej: "Mi Página").
+
+Diferencia clave vs tablas: en lugar de `.table-scroll`, el lado derecho usa un **browser mockup** que también crece con `flex:1`.
+
+```css
+/* Mismos 3 pasos del panel (view-mi-pagina) */
+.view-area.view-mi-pagina { overflow:hidden; display:flex; flex-direction:column; padding:0; }
+
+/* En el componente */
+:host { flex:1; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+.shell  { flex:1; display:flex; flex-direction:column; min-height:0; }
+.body   { flex:1; min-height:0; display:flex; overflow:hidden; }  /* ← row */
+.form-col   { min-width:340px; width:38%; max-width:440px; flex-shrink:0; /* column scroll */ }
+.preview-col { flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; }
+.browser-wrap { flex:1; min-height:0; display:flex; flex-direction:column; }
+.browser-frame { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+/* Elemento que "empuja" al footer hacia abajo dentro del browser */
+.preview-content-area { flex:1; }
+```
+
+**Gotcha — espacio vacío a los lados en el preview**: si dentro de `.preview-col` (que es `flex:1` y ocupa ~930px) pones un `.preview-col-inner` con `max-width: 480px; margin: 0 auto`, quedan ~225px vacíos a cada lado visibles como cajas blancas. Fix: **eliminar el max-width**, dejar que el inner también sea `flex:1` con `flex-direction:column`. El contenido interno escala al ancho disponible.
+
+**Regla**: nunca centrar un contenedor con `max-width + margin: auto` dentro de una columna flex que ya tiene `flex:1` — a menos que quieras el efecto de centrado explícito y las cajas vacías sean aceptables.
 
 ## CSS budget de Angular superado (sesión 39)
 

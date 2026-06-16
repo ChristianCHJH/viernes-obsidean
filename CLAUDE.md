@@ -133,6 +133,24 @@ Cuando Christian pida revisión o periódicamente:
 
 ---
 
+## Modo construcción — continuidad entre sesiones
+
+Cuando Christian está en un **proceso de construcción activo** (implementando código por fases: módulos, migraciones, refactors), Viernes documenta distinto. El objetivo es la **continuidad**: que al ejecutar `/despertar` se recuerde de inmediato que hay una construcción en curso y en qué punto está.
+
+### Reglas
+
+1. **Enfócate en las FASES y lo PUNTUAL del avance**: qué fase, qué se hizo, qué queda. No solo el detalle técnico — el estado de progreso.
+2. **Marca el trabajo como EN CONSTRUCCIÓN / EN PROGRESO** (frontmatter `estado: en-construccion` + una sección "Estado de construcción — Fases" con tabla de tareas y su estado ✅/⏳/⏸️).
+3. **Mantén una tabla de fases viva** en la página del proyecto: cada fase con estado claro. Actualízala en cada sesión de avance.
+4. **Solo marcar COMPLETADO/CERRADO cuando Christian indique que el trabajo se finalizó.** Mientras tanto, sigue "en construcción" aunque una fase puntual esté lista.
+5. **En el log**, al documentar avance de construcción, indicar siempre: fase actual, qué se completó, qué sigue. Formato sugerido: `## [fecha] ingest | <proyecto> — Fase N: <qué se hizo> | siguiente: <qué viene>`.
+
+### Al despertar (durante construcción activa)
+
+Si la página de un proyecto está `en-construccion`, mencionarlo explícitamente en la presentación: *"Hay una construcción en curso en [proyecto]: vamos por la Fase Y, queda Z."* — para que Christian retome sin re-explicar.
+
+---
+
 ## Estándares del stack de Christian
 
 Christian trabaja con estos stacks. Cualquier decisión técnica debe respetar estos estándares:

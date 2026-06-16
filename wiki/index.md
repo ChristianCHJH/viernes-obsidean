@@ -2,7 +2,7 @@
 
 Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
-Última actualización: 2026-06-07 (restructure frontend)
+Última actualización: 2026-06-16 (Hero + Newsletter eliminados del catálogo ✅)
 
 ---
 
@@ -36,6 +36,7 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 | [[proyectos/venta-inventario-frontend-sedes]] | Sedes lista premium, drawer stock, toggle custom, select nativo | activo |
 | [[proyectos/venta-inventario-testing]] | Jest 114 tests backend, mocks Sequelize, Playwright plan | activo |
 | [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, plantillas, permisos Plan 2, migración 014 | activo |
+| [[proyectos/venta-inventario-variantes]] | Categorías jerárquicas + variantes (talla/color), facetas catálogo, modelo cerrado | 🔨 en-construcción |
 | [[proyectos/proyecto-spa]] | Base arquitectónica SPA con ADR y ai-workflow | activo |
 | [[proyectos/autenticacion-prototipo]] | Prototipo de sistema de autenticación JWT | archivado |
 | [[proyectos/landing-page-christina]] | Landing page HTML estático para Christina | activo |
