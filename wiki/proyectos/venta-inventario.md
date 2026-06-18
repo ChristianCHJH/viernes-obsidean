@@ -40,6 +40,7 @@ Sistema multi-plataforma de gestión de inventario multi-sede. Backend NestJS, f
 - [[venta-inventario-frontend]] — Angular, extraerDatos(), sidebar, class-validator gotchas
 - [[venta-inventario-testing]] — Jest unit tests backend (114 tests), estrategia E2E, mocks Sequelize
 - [[venta-inventario-catalogo]] — Catálogo público Next.js, plantillas, permisos Plan 2, migración 014
+- [[venta-inventario-variantes]] — Categorías jerárquicas + variantes (talla/color), facetas catálogo, plan en fases
 - [[venta-inventario-correo]] — Módulo correo Gmail SMTP, bienvenida, recuperación contraseña
 
 ## Regla: consultar schema antes de escribir migraciones SQL
