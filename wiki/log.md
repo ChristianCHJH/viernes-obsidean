@@ -4,6 +4,14 @@ Registro cronológico de operaciones. Formato de entrada: `## [YYYY-MM-DD] tipo 
 
 Tipos: `init` | `ingest` | `query` | `lint` | `update`
 
+## [2026-06-17] ingest | filtro de variantes en el catálogo público + documentación variantes
+
+- **Doc nueva**: `venta-inventario-variantes-categorias.md` — sistema completo de variantes (Talla/Color generadores vs descriptivos), 10 tablas (migraciones 026 + 031), módulos `VariantesModulo`/`AtributosModulo`, tab en productos-premium. No existía página `.md` en el wiki, solo el HTML/plan suelto. `index.md`: 13 proyectos / 38 páginas.
+- **Backend**: `/pub/{slug}/productos` ahora incrusta `atributos[]` por producto (solo `genera_variante=true`) con un `DISTINCT` raw sobre `producto_variante_valor → atributo_valor → atributo_tipo`. Nuevos DTOs `AtributoPublicoDto`/`ValorAtributoPublicoDto`. Sin migración ni permisos (solo lectura). +3 tests en `publico.servicio.spec.ts` (13 verde).
+- **Frontend catálogo (Next.js)**: `ProductoPublico` extendido con `atributos`; nuevo `lib/facetas.ts` (derivarFacetas = DISTINCT client-side por negocio; filtrarPorFacetas = OR intra-grupo / AND entre grupos). **Filtro de variantes en sidebar izquierdo en ambas plantillas**: `catalogo-esencias` (FilterSidebar reescrito de categoría→variante) y `catalogo-grilla` (FilterSidebar nuevo + layout flex sidebar+grid). Chips para talla, swatches para color. Mock data con variantes de demo.
+- **Decisión**: sidebar izq = solo variantes; descriptivos/categorías ("ropa invierno/niños") irán en navbar más adelante. Filtro muestra todos los valores configurados (sin filtrar por stock).
+- Pendiente: test `lib/facetas.test.ts` (catálogo no tiene runner aún) + E2E `13-catalogo/catalogo-filtro-variantes.spec.ts`.
+
 ## [2026-06-07] restructure | venta-inventario-frontend.md dividido en 11 sub-páginas atómicas — 2217 líneas → ~100 líneas/archivo
 
 - Hub reemplazado con stack, estado actual y WikiLinks
