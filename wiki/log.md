@@ -12,7 +12,15 @@ Tipos: `init` | `ingest` | `query` | `lint` | `update`
 - **Arquitectura motor vs contenido**: `engine/` (storage, lesson-engine, exercises, speech, qa-banner, styles) + `curriculum/roadmap.js` + `lessons/month-01/`. 7 tipos de ejercicio, cada uno con `topic` obligatorio → etiquetado de errores + repaso espaciado. Voz vía Web Speech API (umbral permisivo→estricto por nivel). Persistencia localStorage + Exportar/Importar JSON.
 - **Estado validado** ("de momento todo bien"): 5 hitos ✅ (motor base, Clase 1 con mini-diagnóstico de 12 preguntas, Clase 2 normal, examen Mes 1 con etiquetado por tema, dashboard). 4 commits. Sintaxis verificada con `node --check`.
 - **Pendiente**: clases 03–25 del Mes 1 (mismo molde que `lesson-02.js`, `available:false` en roadmap), generación en lote tras visto bueno; meses A2→C2 y planificación adaptativa post-examen.
-- **Páginas wiki**: creadas [[proyectos/profesor-ingles]] y [[conceptos/fetch-bloqueado-file-protocol]] (primer concepto del wiki). index.md actualizado (13 proyectos, 1 concepto, 39 páginas).
+- **Páginas wiki**: creadas [[proyectos/profesor-ingles]] y [[conceptos/fetch-bloqueado-file-protocol]] (primer concepto del wiki). index.md actualizado (13 proyectos, 1 concepto, 40 páginas).
+
+## [2026-06-17] ingest | filtro de variantes en el catálogo público + documentación variantes
+
+- **Doc nueva**: `venta-inventario-variantes-categorias.md` — sistema completo de variantes (Talla/Color generadores vs descriptivos), 10 tablas (migraciones 026 + 031), módulos `VariantesModulo`/`AtributosModulo`, tab en productos-premium. No existía página `.md` en el wiki, solo el HTML/plan suelto. `index.md`: 13 proyectos / 38 páginas.
+- **Backend**: `/pub/{slug}/productos` ahora incrusta `atributos[]` por producto (solo `genera_variante=true`) con un `DISTINCT` raw sobre `producto_variante_valor → atributo_valor → atributo_tipo`. Nuevos DTOs `AtributoPublicoDto`/`ValorAtributoPublicoDto`. Sin migración ni permisos (solo lectura). +3 tests en `publico.servicio.spec.ts` (13 verde).
+- **Frontend catálogo (Next.js)**: `ProductoPublico` extendido con `atributos`; nuevo `lib/facetas.ts` (derivarFacetas = DISTINCT client-side por negocio; filtrarPorFacetas = OR intra-grupo / AND entre grupos). **Filtro de variantes en sidebar izquierdo en ambas plantillas**: `catalogo-esencias` (FilterSidebar reescrito de categoría→variante) y `catalogo-grilla` (FilterSidebar nuevo + layout flex sidebar+grid). Chips para talla, swatches para color. Mock data con variantes de demo.
+- **Decisión**: sidebar izq = solo variantes; descriptivos/categorías ("ropa invierno/niños") irán en navbar más adelante. Filtro muestra todos los valores configurados (sin filtrar por stock).
+- Pendiente: test `lib/facetas.test.ts` (catálogo no tiene runner aún) + E2E `13-catalogo/catalogo-filtro-variantes.spec.ts`.
 
 ## [2026-06-16] update | venta-inventario — "Mi Página" rediseño premium con /premium-refactor | siguiente: nada pendiente
 

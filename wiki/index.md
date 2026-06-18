@@ -38,6 +38,7 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 | [[proyectos/venta-inventario-testing]] | Jest 114 tests backend, mocks Sequelize, Playwright plan | activo |
 | [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, plantillas, permisos Plan 2, migración 014 | activo |
 | [[proyectos/venta-inventario-variantes]] | Categorías jerárquicas + variantes (talla/color), facetas catálogo, modelo cerrado | 🔨 en-construcción |
+| [[proyectos/venta-inventario-variantes-categorias]] | Variantes (Talla/Color), categorías, atributos — 10 tablas, módulos backend, filtro catálogo | activo |
 | [[proyectos/proyecto-spa]] | Base arquitectónica SPA con ADR y ai-workflow | activo |
 | [[proyectos/autenticacion-prototipo]] | Prototipo de sistema de autenticación JWT | archivado |
 | [[proyectos/landing-page-christina]] | Landing page HTML estático para Christina | activo |
@@ -92,7 +93,7 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
 ## Notas del wiki
 
-- Total de páginas: 39
+- Total de páginas: 40
 - Proyectos con ingestión profunda completa: 2 (venta-inventario, autenticacion-prototipo)
 - venta-inventario refactorizado a hub + 6 sub-páginas atómicas (2026-05-07)
 - `venta-inventario-frontend.md` actualizado 2026-05-08: regla permisos permanente, vista unificada Secciones+Permisos, bugs `pi-slash` y password autocomplete
