@@ -2,11 +2,11 @@
 
 Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
-Última actualización: 2026-06-16 (Hero + Newsletter eliminados del catálogo ✅)
+Última actualización: 2026-06-18 (Nuevo proyecto Profesor Inglés — curso estático vanilla)
 
 ---
 
-## Proyectos (12)
+## Proyectos (13)
 
 | Página | Descripción | Estado |
 | ------ | ----------- | ------ |
@@ -34,12 +34,14 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 | [[proyectos/venta-inventario-frontend-productos-premium-ux]] | UX mobile, bottom sheets, card compact prod-row, paginación fix | activo |
 | [[proyectos/venta-inventario-frontend-diseno]] | Tokens globales --p-*, sidebar v2, top bar, negative margins, CSS budget | activo |
 | [[proyectos/venta-inventario-frontend-sedes]] | Sedes lista premium, drawer stock, toggle custom, select nativo | activo |
+| [[proyectos/venta-inventario-frontend-negocios]] | Negocios lista premium — KPIs, view-mint, nivel-badge, mobile rows, Tailwind JIT gotcha | activo |
 | [[proyectos/venta-inventario-testing]] | Jest 114 tests backend, mocks Sequelize, Playwright plan | activo |
 | [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, plantillas, permisos Plan 2, migración 014 | activo |
 | [[proyectos/venta-inventario-variantes]] | Categorías jerárquicas + variantes (talla/color), facetas catálogo, modelo cerrado | 🔨 en-construcción |
 | [[proyectos/proyecto-spa]] | Base arquitectónica SPA con ADR y ai-workflow | activo |
 | [[proyectos/autenticacion-prototipo]] | Prototipo de sistema de autenticación JWT | archivado |
 | [[proyectos/landing-page-christina]] | Landing page HTML estático para Christina | activo |
+| [[proyectos/profesor-ingles]] | Curso de inglés autodidacta CEFR — HTML/CSS/JS vanilla, sin build, Web Speech API | activo |
 
 ---
 
@@ -66,9 +68,11 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
 ---
 
-## Conceptos (0)
+## Conceptos (1)
 
-*Pendiente. Se crearán al identificar patrones y decisiones recurrentes.*
+| Página | Descripción |
+| ------ | ----------- |
+| [[conceptos/fetch-bloqueado-file-protocol]] | `fetch` bloqueado bajo `file://` — patrón script-global para webs estáticas de doble clic |
 
 ---
 
@@ -88,7 +92,7 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
 ## Notas del wiki
 
-- Total de páginas: 37
+- Total de páginas: 39
 - Proyectos con ingestión profunda completa: 2 (venta-inventario, autenticacion-prototipo)
 - venta-inventario refactorizado a hub + 6 sub-páginas atómicas (2026-05-07)
 - `venta-inventario-frontend.md` actualizado 2026-05-08: regla permisos permanente, vista unificada Secciones+Permisos, bugs `pi-slash` y password autocomplete

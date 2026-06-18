@@ -122,6 +122,59 @@ Diferencia clave vs tablas: en lugar de `.table-scroll`, el lado derecho usa un 
 
 **Regla**: nunca centrar un contenedor con `max-width + margin: auto` dentro de una columna flex que ya tiene `flex:1` — a menos que quieras el efecto de centrado explícito y las cajas vacías sean aceptables.
 
+## Patrón `view-mint` — fondo mint con scroll de página (2026-06-17)
+
+Variante del patrón tablas full-height para vistas que **sí necesitan scroll de página** pero con fondo `#F0FDF4` (mint) distinto al shell.
+
+**Diferencia clave vs `view-productos`**:
+- `view-productos`: `overflow: hidden` — el componente maneja su propio scroll interno
+- `view-mint`: **sin** `overflow: hidden` — la vista entera puede scrollear como página normal
+
+### Pasos
+
+**`panel.component.html`** — agregar binding:
+```html
+<div class="view-area" ... [class.view-mint]="vistaActiva === 'negocios'">
+```
+
+**`panel.component.css`** — nueva regla:
+```css
+.view-area.view-mint {
+  background: #F0FDF4;
+  padding: 0;  /* el :host del componente maneja el padding */
+}
+```
+
+**Componente `:host`** — transparente, padding propio:
+```css
+:host {
+  display: block;
+  padding: 1.5rem 3rem 2.5rem;
+  box-sizing: border-box;
+  /* SIN background — el view-area pone el mint */
+}
+```
+
+**Resultado**: un solo fondo mint visible, un solo set de padding. Sin "doble fondo" ni "doble padding".
+
+### Bug: doble fondo / doble padding
+
+**Síntoma**: dos capas de background visibles, o contenido con margen grueso alrededor.
+
+**Causas**:
+1. El `:host` tiene `background: #F0FDF4` Y el `view-area` también tiene background propio (`--spa-bg`)
+2. El `view-area` tiene `padding: 1.5rem 3rem` Y el `:host` también tiene el mismo padding
+
+**Fix**: Quitar background del `:host` (dejarlo transparente), y poner `padding: 0` en `.view-area.view-mint`. Solo el `view-area` pone el background; solo el `:host` pone el padding.
+
+### Cuándo usar cada patrón
+
+| Necesidad | Patrón |
+|-----------|--------|
+| Tabla que ocupa 100% pantalla, sin scroll de página | `view-productos` (overflow:hidden, flex column) |
+| Vista con KPIs + tabla scrolleable + contenido variable | `view-mint` (background mint, padding:0, permite scroll) |
+| Vista con fondo mint Y tabla full-height | Combinar: `overflow:hidden; display:flex; flex-direction:column; padding:0; background:#F0FDF4` |
+
 ## CSS budget de Angular superado (sesión 39)
 
 **Síntoma**: `npm run build` falla con `exceeded maximum budget. Budget 24.58 kB was not met`.

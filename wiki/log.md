@@ -4,6 +4,16 @@ Registro cronológico de operaciones. Formato de entrada: `## [YYYY-MM-DD] tipo 
 
 Tipos: `init` | `ingest` | `query` | `lint` | `update`
 
+## [2026-06-18] ingest | Profesor Inglés (teacher-inglish) — proyecto nuevo, 5 hitos completos | siguiente: clases 03–25 en lote tras visto bueno
+
+- **Proyecto nuevo, stack atípico**: curso de inglés autodidacta CEFR (A1→C2), alumno único (Christian). **100% estático**: HTML + CSS + JS **vanilla**, sin framework/build/servidor, abre con doble clic. Nada de Angular/NestJS — a propósito. Ubicación `c:\Christian\Christian Personal\teacher-inglish`.
+- **Decisión técnica clave**: datos de clase como `.js` que asignan a `window.LESSONS[id]` (no `.json`+`fetch`), porque `fetch` está bloqueado por CORS bajo `file://`. Patrón documentado en concepto reutilizable → [[conceptos/fetch-bloqueado-file-protocol]].
+- **Diseño CERRADO por Christian**: base blanca, sin saturación, acento **verde salvia** con moderación. Tokens `--spa-*`, construido con skill `ui-ux-pro-max` (su CLI Python no corría; se usó la guía/checklist).
+- **Arquitectura motor vs contenido**: `engine/` (storage, lesson-engine, exercises, speech, qa-banner, styles) + `curriculum/roadmap.js` + `lessons/month-01/`. 7 tipos de ejercicio, cada uno con `topic` obligatorio → etiquetado de errores + repaso espaciado. Voz vía Web Speech API (umbral permisivo→estricto por nivel). Persistencia localStorage + Exportar/Importar JSON.
+- **Estado validado** ("de momento todo bien"): 5 hitos ✅ (motor base, Clase 1 con mini-diagnóstico de 12 preguntas, Clase 2 normal, examen Mes 1 con etiquetado por tema, dashboard). 4 commits. Sintaxis verificada con `node --check`.
+- **Pendiente**: clases 03–25 del Mes 1 (mismo molde que `lesson-02.js`, `available:false` en roadmap), generación en lote tras visto bueno; meses A2→C2 y planificación adaptativa post-examen.
+- **Páginas wiki**: creadas [[proyectos/profesor-ingles]] y [[conceptos/fetch-bloqueado-file-protocol]] (primer concepto del wiki). index.md actualizado (13 proyectos, 1 concepto, 39 páginas).
+
 ## [2026-06-16] update | venta-inventario — "Mi Página" rediseño premium con /premium-refactor | siguiente: nada pendiente
 
 - **Skill `/premium-refactor` aplicado**: creó duplicado `mi-pagina-v2/` sin tocar el original → aprobado → `mi-pagina-v2` mergeado a `mi-pagina/`, carpeta v2 eliminada, panel limpiado.
