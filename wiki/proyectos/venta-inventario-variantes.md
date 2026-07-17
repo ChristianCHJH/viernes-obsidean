@@ -3,7 +3,7 @@ titulo: Venta-Inventario — Categorías y Variantes de Producto
 tipo: proyecto
 tags: [inventario, variantes, categorias, catalogo, saas, adifnex, plan]
 fecha_creacion: 2026-06-11
-fecha_actualizacion: 2026-06-12
+fecha_actualizacion: 2026-07-05
 estado: en-construccion
 ---
 
@@ -73,6 +73,7 @@ Sesión completa de resolución de dudas. Modelo cerrado, sin ambigüedad.
 | Valores custom por negocio | **No** — solo seed global; SUPERADMIN amplía |
 | Facetas descriptivas | Material/Género/Temporada — **múltiples** por producto |
 | Ejes de variante | Talla × Color (categoría **sugiere** tallas, editable; sin categoría se elige a mano) |
+| **Un solo tipo de talla** (fix 2026-07-05) | Un producto tiene **UNA sola dimensión de talla**. **Color es el único combinable**; **nunca talla × talla**. "Talla" = generador con `tipo_dato != 'color'`. El backend hace producto cartesiano de todos los tipos juntos → sin esta regla generaba combos absurdos (`9 meses · 27 · 43 · 2X Large · 14 años`). **Refuerzo doble**: UI exclusión mutua (computed `tallaTipoActivoId` + helper `tipoBloqueado`; al elegir una talla los otros grupos de talla se atenúan/deshabilitan, Color libre) + backend `variantes.servicio.ts generarVariantes` lanza `BadRequestException` (400) si llegan 2+ tipos con `tipoDato != 'color'`. Sin cambios de BD |
 | Generación de combinaciones | **Automática** + el negocio quita las que no maneja |
 | SKU de variante | Auto-generado editable |
 | **Precio** | **Único global** por producto — NO varía por talla/color. **Se elimina `precio_override`** |

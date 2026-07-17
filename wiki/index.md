@@ -2,7 +2,7 @@
 
 Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
-Última actualización: 2026-06-18 (Nuevo proyecto Profesor Inglés — curso estático vanilla)
+Última actualización: 2026-07-09 (auditoría backend: clasificación por cubetas A/B/C + ejecución Cubeta A en rama limpieza/cubeta-a-obvios)
 
 ---
 
@@ -36,9 +36,10 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 | [[proyectos/venta-inventario-frontend-sedes]] | Sedes lista premium, drawer stock, toggle custom, select nativo | activo |
 | [[proyectos/venta-inventario-frontend-negocios]] | Negocios lista premium — KPIs, view-mint, nivel-badge, mobile rows, Tailwind JIT gotcha | activo |
 | [[proyectos/venta-inventario-testing]] | Jest 114 tests backend, mocks Sequelize, Playwright plan | activo |
-| [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, plantillas, permisos Plan 2, migración 014 | activo |
+| [[proyectos/venta-inventario-catalogo]] | Catálogo público Next.js, **unificado en 1 (modelo "Temas")**, permisos Plan 2, migración 014 | activo |
 | [[proyectos/venta-inventario-variantes]] | Categorías jerárquicas + variantes (talla/color), facetas catálogo, modelo cerrado | 🔨 en-construcción |
 | [[proyectos/venta-inventario-variantes-categorias]] | Variantes (Talla/Color), categorías, atributos — 10 tablas, módulos backend, filtro catálogo | activo |
+| [[proyectos/venta-inventario-auditoria-backend]] | Auditoría arquitectura backend — 8 fases/64 fichas (SOLID, clean code, Swagger, seguridad, observabilidad) | activo |
 | [[proyectos/proyecto-spa]] | Base arquitectónica SPA con ADR y ai-workflow | activo |
 | [[proyectos/autenticacion-prototipo]] | Prototipo de sistema de autenticación JWT | archivado |
 | [[proyectos/landing-page-christina]] | Landing page HTML estático para Christina | activo |
@@ -85,15 +86,17 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 
 ---
 
-## Síntesis (0)
+## Síntesis (1)
 
-*Pendiente. Se crearán a partir de análisis y preguntas de Christian.*
+| Página | Descripción | Estado |
+| ------ | ----------- | ------ |
+| [[sintesis/paquete-marketing-adifnex]] | Playbook de marketing: las 43 skills mapeadas al funnel y al estado real de Adifnex; orquestadas por el agente `marketing-asesor` | activo |
 
 ---
 
 ## Notas del wiki
 
-- Total de páginas: 40
+- Total de páginas: 41
 - Proyectos con ingestión profunda completa: 2 (venta-inventario, autenticacion-prototipo)
 - venta-inventario refactorizado a hub + 6 sub-páginas atómicas (2026-05-07)
 - `venta-inventario-frontend.md` actualizado 2026-05-08: regla permisos permanente, vista unificada Secciones+Permisos, bugs `pi-slash` y password autocomplete
@@ -152,3 +155,4 @@ Catálogo de todas las páginas del wiki. Actualizar en cada ingestión.
 - `venta-inventario-frontend.md` actualizado 2026-06-06 (sesión 36): 3 mejoras UX mobile modal productos-premium — (1) preview como bottom sheet, (2) modal altura fija `height: min(88vh,720px)`, (3) formulario "Registrar movimiento" como bottom sheet con auto-cierre. Causa raíz scroll horizontal documentada (doble padding). 2 reglas nuevas.
 - `venta-inventario-frontend.md` actualizado 2026-06-04 (sesión 31): mejoras UI productos-lista (gradiente, pill, row hover accent, action buttons tipados, modal border-top); componente `productos-premium` desde cero (design system indigo/violet, KPI bar, gradiente tabla header, pulse-dot, avatares dinámicos, DM Sans); trick negative margins :host. Fase 6 migración corregida a ✅.
 - `venta-inventario-testing.md` actualizado 2026-06-03 (sesión 29): sprint Fase 6 — +5 tests pendientes para `mi-pagina.component.spec.ts`. Total ~221 frontend estimado.
+- `venta-inventario-frontend-productos-premium.md` + `venta-inventario-variantes.md` actualizados 2026-07-05: componente `app-busqueda-select` (dropdown con buscador vía CDK Overlay para escapar overflow del modal); regla **1 solo tipo de talla por producto** (Color único combinable, UI exclusión mutua + backend 400); campo Descripción unificado (crear=catálogo, mismo `producto.descripcion`) con límite 80 chars.

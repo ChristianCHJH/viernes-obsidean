@@ -4,6 +4,61 @@ Registro cronológico de operaciones. Formato de entrada: `## [YYYY-MM-DD] tipo 
 
 Tipos: `init` | `ingest` | `query` | `lint` | `update`
 
+---
+
+## [2026-07-09] ingest | Venta e Inventario — Auditoría backend: clasificación por cubetas + ejecución Cubeta A
+
+Páginas actualizadas:
+- `proyectos/venta-inventario-auditoria-backend.md` — nueva sección "Clasificación por decisión (cubetas A/B/C)" + "Estado de ejecución — Cubeta A"; fecha.
+
+Contexto: se pidió filtrar de los 64 hallazgos cuáles tienen **un solo camino de corrección obvio** (tipo "encriptar contraseña", sin decisión). Resultado: Cubeta A (~12, cero consulta), Cubeta B (~14, dirección fija + 1 dato), Cubeta C (resto, decisión de producto/arquitectura).
+
+Ejecución Cubeta A en rama `limpieza/cubeta-a-obvios` (submódulo backend, build `tsc` OK, **sin push**), 4 commits: 1f1f95a (clasificación), 4b6e160 (fixes código), b55590b (@ApiBearerAuth ×19), c7fe877 (marca índice). Aplicado: F7-07 (login+eliminado), F7-04-parte (buscarPorId sin contrasenaHash), F1-04 (secreto JWT sin fallback, fail-fast), F1-01+F2-02 (main.ts limpio + shutdown hooks), F1-06+F1-09 (uuid fuera + engines), F4-03 (imports muertos), F5-01 (@ApiBearerAuth).
+
+Diferido con honestidad tras ver el código: F7-02 (hashear tokens → jti es PK y token a la vez, requiere refactor del flujo), F6-D (necesita "usuario sistema"), F4-06/F5-03/F5-04.
+
+Aprendizaje/preferencia: **no editar `src/` con perl/sed masivo** — usar Edit tool o subagente Read+Edit + `npm run build`. (Christian rechazó un `perl -i` que tocaba 18 controladores; se rehízo delegando a subagente con Edit.)
+
+Pendiente: probar login multi-negocio antes de mergear (F7-07/F7-04 cambian comportamiento); decidir si mergear la rama o seguir con Cubeta B.
+
+---
+
+## [2026-07-08] ingest | Venta e Inventario — Auditoría de arquitectura del backend (8 fases/64 fichas)
+
+Páginas creadas:
+- `proyectos/venta-inventario-auditoria-backend.md` — auditoría de solo lectura del backend NestJS: deuda técnica, SOLID, clean code, Swagger, estándar de columnas, seguridad, observabilidad.
+
+Páginas actualizadas:
+- `proyectos/venta-inventario.md` — sub-página enlazada + fecha.
+- `index.md` — fila nueva, total 41, nota de última actualización.
+
+Contexto: sesión de auditoría documental (no se cambió código). Se generó `backend/PLAN-MEJORAS-BACKEND.md` + `backend/docs/auditoria/` (índice + 64 fichas, una por hallazgo, con doc oficial y checklist). Metodología acordada: detallar **por partes, fase por fase**; **un commit por fase** en el submódulo backend/main (7 commits: 8ede884, 4ce1f2e, 34bf80e, 6adbc15, 0f75dc5, 03a0701, 423d4de). No se hizo push; puntero del submódulo en el repo padre sin commitear.
+
+Hallazgos clave: Fase 7 seguridad (account takeover en refresh-tokens sin permisos + token sin hashear; IDOR negocio-permisos/usuarios con fuga de contrasenaHash; escalada cross-tenant; jwt.estrategia sin `eliminado`/plan; login sin `eliminado`; CORS abierto; sin rate limiting). Fase 6 columnas (usuarioActualizacion en INSERT ~25 sitios; usuarioCreacion=negocioId). Fase 8 observabilidad casi nula (solo Logger en 3 archivos + /health inline). Corrección doc: `backend/CLAUDE.md` dice TypeORM pero es Sequelize. No tocar el envelope `{exito,mensaje,datos}` (frontend depende).
+
+Pendiente: ejecutar correcciones por fases cuando Christian lo indique (Fases 6-7 requieren aprobación por cambiar datos/lógica).
+
+## [2026-07-05] ingest | productos-premium — busqueda-select (CDK overlay) + regla 1 tipo de talla + descripción unificada máx 80
+
+- **`app-busqueda-select`** (shared): dropdown con buscador que reemplaza al `<select>` nativo del marca (crear + editar). Gotcha raíz: panel `position:absolute` **recortado por el overflow del modal** → solución con **CDK Overlay** (`cdkConnectedOverlay`) que monta el panel en `cdk-overlay-container` fuera del scroll. Ancho sincronizado al trigger, cierra con `overlayOutsideClick`. CSS overlay ya cargado (MatDialog). Documentado en [[venta-inventario-frontend-productos-premium]].
+- **Regla de variantes — UN solo tipo de talla** (bug: generaba combos absurdos `9 meses·27·43·2X Large·14 años`): un producto tiene una sola dimensión de talla; **Color es lo único combinable, nunca talla × talla**. "Talla" = generador con `tipo_dato != 'color'`. Refuerzo doble: UI exclusión mutua (`tallaTipoActivoId` + `tipoBloqueado`, grupos de talla se atenúan) + backend `generarVariantes` lanza 400 si llegan 2+ tipos no-color. Sin cambios de BD. Documentado en [[venta-inventario-variantes]].
+- **Campo Descripción unificado**: "Descripción" (crear) y "Descripción del catálogo" (editar) eran el MISMO `producto.descripcion` — confundía. Homologada etiqueta a solo "Descripción". Añadido **límite 80 chars**: `@MaxLength(80)` en `CrearProductoDto` (cubre actualizar vía PartialType) + `maxlength`/contador `/80` en ambos textareas.
+- Verificado: frontend + backend `tsc --noEmit` limpio.
+
+## [2026-06-30] ingest | venta-inventario-catalogo — Unificación de 7 plantillas en 1 + modelo "Temas" | siguiente: pulir thumbnails de preview por formato (opcional)
+
+- **Refactor mayor en `catalogo-react`**: las 7 plantillas (`grilla`, `esencias`, `bebe`, `dama`, `mujer`, `accesorios`, `standard`) tenían ~95% de código duplicado. Se unificaron en **un solo catálogo** manejado por registro de presets: `lib/plantillas/{tipos,registro}.ts` + `components/catalogo/` (shell `Catalogo.tsx`, `PlantillaContext`, componentes únicos, `ProductCard` parametrizado). `page.tsx` quedó en un solo `<Catalogo>`; se eliminaron las 7 carpetas `templates/`.
+- **Modelo conceptual "Tema curado + color libre"**: un tema = fuente + formato de card FIJOS + color elegible (4 por tema). No se combinan libremente (evita combos incoherentes y explosión de QA). String `config.plantilla` sin cambios → cero backend.
+- **4 formatos de card** (enum): estandar 4:3, redondeado (bebe), alto 3:4 (esencias), cuadrado 1:1 (accesorios). Fuentes: Quicksand / Playfair / Cormorant / Jost.
+- **Grilla y Esencias ahora con 4 colores** (antes 1): Grilla (Esmeralda/Azul/Grafito/Vino), Esencias (Sepia/Carbón/Rosa/Oliva).
+- **Admin Angular "Mi Página"**: renombrado Plantillas→**Temas**; las 7 unificadas en el array `familias` (eliminado código especial de Bebé); Grilla/Esencias ahora con selector de color; `FamiliaPlantilla` +`fuenteTitulo`/`formato`.
+- **Vista previa con productos ficticios**: 3 mocks con fuente real + formato + color (antes placeholder). Fuentes Google cargadas en `index.html`. **Gotcha**: imagen del mock usaba `soft` = mismo color que el fondo → invisible (Esencias salía vacío); fix con `surface` + borde + ícono SVG de foto.
+- Verificado: `catalogo-react` tsc OK; `frontend` ng build OK.
+
+## [2026-06-22] update | Modelo de cobro = Yape directo manual (no pasarela aún): funnel catálogo → WhatsApp → cierre → Yape → activación a mano. CTA único "Escríbeme por WhatsApp". Culqi/Stripe + autoservicio diferidos. Actualizado adifnex-saas.md, product-marketing.md, paquete-marketing-adifnex.md.
+
+## [2026-06-22] marketing | Paquete de marketing armado: agente `marketing-asesor` (.claude/agents/) + playbook `sintesis/paquete-marketing-adifnex.md`; refrescado `.agents/product-marketing.md` con estado/planes 2026-06-22. Las 43 skills coreyhaines31/marketingskills ya estaban instaladas.
+
 ## [2026-06-18] ingest | Profesor Inglés (teacher-inglish) — proyecto nuevo, 5 hitos completos | siguiente: clases 03–25 en lote tras visto bueno
 
 - **Proyecto nuevo, stack atípico**: curso de inglés autodidacta CEFR (A1→C2), alumno único (Christian). **100% estático**: HTML + CSS + JS **vanilla**, sin framework/build/servidor, abre con doble clic. Nada de Angular/NestJS — a propósito. Ubicación `c:\Christian\Christian Personal\teacher-inglish`.

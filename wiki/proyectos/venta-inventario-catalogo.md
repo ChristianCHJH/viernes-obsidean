@@ -3,7 +3,7 @@ titulo: Venta e Inventario — Catálogo Público Multi-Negocio (adifnex-catalog
 tipo: proyecto
 tags: [catalogo, nextjs, react, tailwind, landing, multi-negocio, plan2, permisos, adifnex]
 fecha_creacion: 2026-05-15
-fecha_actualizacion: 2026-06-16
+fecha_actualizacion: 2026-06-30
 estado: activo
 ---
 
@@ -24,6 +24,8 @@ Nuevo repositorio Next.js separado del mono-repo principal. Sirve páginas de ca
 | URL dev | `http://localhost:3010/lullaby-soft` (usa mock si backend no disponible) |
 
 ## Qué es una "plantilla" — definición crítica
+
+> ⚠️ **Reencuadrado el 2026-06-30** — ver sección [Refactor 2026-06-30 — Unificación + modelo de "Temas"](#refactor-2026-06-30--unificación-de-plantillas--modelo-de-temas). La estructura/layout dejó de ser distinta por plantilla: ahora **todas comparten el mismo shell** y solo cambian **fuente + formato de card + color**. El término "plantilla" pasó a llamarse **"Tema"** en la UI. Esta sección histórica se conserva como contexto del modelo original (2 plantillas con código duplicado).
 
 Una plantilla **NO es un cambio de colores**. Es un **diseño completamente distinto**: layout, paleta, tipografía y componentes son diferentes entre plantillas. Lo que sí es homogéneo es el **modelo de datos** — todas consumen los mismos endpoints y el mismo contrato TypeScript.
 
@@ -492,6 +494,73 @@ El componente `PaginaNoDisponible` aparece ante CUALQUIER error del try/catch en
 ### Panel "Mi Página" — tabs restantes
 
 Ahora solo quedan 4 tabs: **Identidad** · **Contacto** · **SEO** · **Plantilla**.
+
+---
+
+## Refactor 2026-06-30 — Unificación de plantillas + modelo de "Temas"
+
+**Contexto**: las plantillas habían crecido a **7 tipos** (`grilla`, `esencias`, `bebe`, `dama`, `mujer`, `accesorios`, `standard`), cada una en su carpeta `templates/catalogo-*` con su propio `index.tsx`, `Navbar`, `FilterSidebar`, `ProductGrid`, `ProductCard`, `Footer`, `WhatsAppFab`, `theme.ts`, `temaContext.tsx`. La estructura/layout era **idéntica** entre ellas; lo único que cambiaba era **color, tipografía y formato del card**. → ~95% de código duplicado + un `if/else` gigante en `app/[slug]/page.tsx`. Tocar algo obligaba a editar 7 carpetas.
+
+**Decisión (con Christian)**: un **solo catálogo** manejado por un **registro de presets**. Modelo conceptual **"Tema curado + color libre"**:
+- Un **tema** empaqueta **fuente + formato de card FIJOS** (su personalidad). NO se combinan libremente.
+- El negocio solo elige **color** (4 paletas por tema).
+- Se descartó el desacople total (color × fuente × card sueltos): generaría combinaciones incoherentes y explosión de QA (4×4×4=64 combos vs 7 temas × 4 colores). 
+- **String `config.plantilla` sin cambios** (`catalogo-X[-color]`) → **cero cambios en backend/BD**. Retrocompatible.
+
+### Arquitectura nueva en `catalogo-react`
+
+| Pieza | Archivo | Rol |
+|---|---|---|
+| Tipos | `lib/plantillas/tipos.ts` | `Tema` (11 colores), `ConfigCard`, `Fuentes`, `PlantillaResuelta`, `Preset` |
+| Registro | `lib/plantillas/registro.ts` | `PRESETS` por prefijo + `resolverPlantilla(plantilla) → {tema, fuentes, card}`. Paletas copiadas exactas de los viejos `theme.ts`. Resolver genérico: matchea prefijo (más largo primero) y resuelve sufijo de color; fallback = grilla |
+| Contexto | `components/catalogo/PlantillaContext.tsx` | `PlantillaProvider` + hooks `usePlantilla/useTema/useFuentes/useCard` (reemplaza los 7 `temaContext`) |
+| Shell | `components/catalogo/Catalogo.tsx` | Único; resuelve plantilla, envuelve en provider, renderiza banda bienvenida + sidebar + grid + footer + fab |
+| Componentes | `components/catalogo/{Navbar,FilterSidebar,ProductGrid,Footer,WhatsAppFab}.tsx` | Únicos (basados en standard, usan `fuentes.titulo` para headings) |
+| Card | `components/catalogo/ProductCard.tsx` | **Una sola card parametrizada** por `ConfigCard` |
+| Detalle | `lib/tema-catalogo.ts` | `resolverTemaDetalle()` reescrito para reusar `resolverPlantilla` (antes reimportaba 5 `theme.ts`) |
+
+`app/[slug]/page.tsx` quedó en **un solo `<Catalogo>`** sin imports ni `if/else`. Las **7 carpetas `templates/` se eliminaron**.
+
+### 4 formatos de card (enum `FormatoCard`)
+
+| Formato | Aspecto | Quién | Rasgos |
+|---|---|---|---|
+| `estandar` | 4:3 | grilla, standard, dama, mujer | borde, swatches, badge oferta, WhatsApp verde |
+| `redondeado` | 4:3 | bebe | `rounded-3xl` + sombra, WhatsApp verde |
+| `alto` | 3:4 | esencias | sin borde, sin swatches, WhatsApp color primary, oferta texto |
+| `cuadrado` | 1:1 | accesorios | badge índice 01/02, título UPPERCASE, swatches inline, **sin WhatsApp**, oferta texto |
+
+Flags de `ConfigCard`: `swatches`, `indice`, `whatsapp: 'verde'|'primary'|'oculto'`, `ofertaEstilo: 'badge'|'texto'`, `tituloUppercase`, `tituloFuente`.
+
+### Fuentes por tema (CSS vars en `app/layout.tsx`)
+
+| Tema | Título | Cuerpo |
+|---|---|---|
+| grilla, bebe, standard | Quicksand | Nunito Sans |
+| esencias | Playfair Display (serif) | Nunito Sans |
+| dama, mujer | Cormorant Garamond (serif) | Nunito Sans |
+| accesorios | Jost (gallery) | Jost |
+
+### Colores — Grilla y Esencias ahora con 4 variantes (antes 1)
+
+- **Grilla**: Esmeralda (default `catalogo-grilla`), Azul, Grafito, Vino.
+- **Esencias**: Sepia (default `catalogo-esencias`), Carbón, Rosa, Oliva.
+- Las paletas faltantes de Esencias/Grilla (eran tema único) se completaron a las 11 claves de `Tema`.
+
+### Admin Angular "Mi Página" — reencuadre a "Temas"
+
+- Renombrado **"Plantillas"/"Diseño del catálogo" → "Temas"**; tab `Plantilla` → `Tema`; "Color del diseño" → "Color del tema".
+- **Unificado el modelo**: las 7 ahora viven en el array `familias`. Se eliminó todo el código especial de Bebé (`variantesBebe`, `varianteBebe*`, `esFamiliaBebe`) y las 3 tarjetas hardcodeadas (Grilla/Esencias/Bebé). Un solo `@for` las renderiza con sus swatches.
+- **Grilla y Esencias ahora muestran selector de color** (antes a un solo color).
+- `FamiliaPlantilla` extendida con `fuenteTitulo` (CSS) + `formato`.
+
+### Vista previa con productos ficticios
+
+Antes el preview mostraba un placeholder `[ Grid de productos ]`. Ahora muestra **3 productos ficticios** (`productosEjemplo`) con la **fuente real + formato + color** del tema activo, para ver de verdad cómo se ve. Helpers: `temaActivo()`, `previewVariante()`, `aspectoPreview()`. Las **fuentes Google reales** (Quicksand, Nunito Sans, Playfair, Cormorant, Jost) se cargan vía `<link>` en `frontend/src/index.html`. El nombre del navbar del preview también usa la fuente del tema.
+
+**Gotcha — imagen del mock invisible**: la imagen-placeholder usaba `previewVariante().soft`, que es **el mismo color que el fondo del cuerpo** (`previewTema().bodyBg = soft`) → la imagen no se veía (peor en formatos sin fondo de card: Esencias/Accesorios → preview "vacío"). **Fix**: la imagen usa `surface` (color distinto) + `box-shadow: inset 0 0 0 1px` + un **ícono SVG de foto** (marco + montaña) en color `primaryDark`. Regla derivada: en mockups, nunca pintar el placeholder con el mismo color del contenedor; usar color contrastante + ícono representativo.
+
+**Verificación**: `catalogo-react` `tsc --noEmit` OK + runtime de `resolverPlantilla` (todos los prefijos/colores/fallback). `frontend` `ng build` OK.
 
 ---
 

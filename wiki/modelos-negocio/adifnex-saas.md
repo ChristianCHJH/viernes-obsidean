@@ -3,7 +3,7 @@ titulo: Adifnex — Modelo SaaS Comercial
 tipo: modelo-negocio
 tags: [adifnex, saas, ecommerce, catalogo, peru, pricing, lanzamiento]
 fecha_creacion: 2026-05-29
-fecha_actualizacion: 2026-05-31
+fecha_actualizacion: 2026-06-22
 estado: activo
 ---
 
@@ -47,8 +47,10 @@ Referencia de mercado: Tiendanube Perú desde S/49/mes.
 
 ### Estrategia de adquisición — primeros 10 clientes (meta: julio 2026)
 
-- **Modelo:** Trial con tarjeta registrada desde el inicio (no freemium)
-- Tarjeta requerida evita usuarios fantasma y convierte mejor
+- **Cobro actual: Yape directo a Christian, manual.** Decisión 2026-06-22: para los primeros clientes NO se usa pasarela ni registro autoservicio con tarjeta.
+- **Flujo:** catálogo/landing → contacto por **WhatsApp** → Christian conversa y cierra → cliente paga por **Yape** → Christian activa la cuenta y publica el catálogo a mano.
+- **CTA único de marketing:** "Escríbeme por WhatsApp" (no "regístrate", no "paga aquí"). La conversión es la conversación, no un checkout.
+- **Por qué manual ahora:** bajo volumen, cierre conversado convierte mejor y permite aprender del cliente. Automatizar (Culqi/Stripe + autoservicio) cuando el volumen lo justifique.
 
 | Código | Beneficio | Uso |
 |---|---|---|
@@ -85,8 +87,9 @@ Ver [[proyectos/venta-inventario]] para detalle técnico.
 
 ### P0 — Bloqueantes para primer cliente pagante
 - [x] Página de registro público (autoservicio) ✅ 2026-05-31
-- [ ] Integración de pagos (Culqi o Stripe)
-- [ ] Activar `fecha_vencimiento` (cortar acceso si no paga)
+- [x] Cobro resuelto vía Yape manual + activación a mano ✅ 2026-06-22 (ya no bloquea)
+- [~] Integración de pagos (Culqi o Stripe) — **diferido**, no bloquea con cobro manual
+- [~] Activar `fecha_vencimiento` (cortar acceso si no paga) — diferido; control manual por ahora
 
 ### P1 — Para crecer
 - [x] Landing page de ventas con pricing público ✅ 2026-05-31

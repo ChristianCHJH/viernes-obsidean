@@ -3,7 +3,7 @@ titulo: Frontend — Componente productos-premium
 tipo: proyecto
 tags: [inventario, angular, productos-premium, modal, design-system, adifnex]
 fecha_creacion: 2026-06-07
-fecha_actualizacion: 2026-06-07
+fecha_actualizacion: 2026-07-05
 estado: activo
 ---
 
@@ -59,10 +59,20 @@ Estructura:
 Override obligatorio: `.cat-form { overflow: hidden !important; padding: 0 !important; gap: 0 !important; }`
 
 ### Tab "Producto"
-Nombre, SKU (toggle auto/manual), stock mínimo, marca (`<select>` nativo con SVG arrow), etiquetas (chips clickables con `color-mix`).
+Nombre, SKU (toggle auto/manual), stock mínimo, marca (**`app-busqueda-select`** con buscador — ver abajo), etiquetas (chips clickables con `color-mix`).
 
 ### Tab "Catálogo"
 `catVisible` (toggle), `catPrecio`, `catPrecioOferta`, `catDescripcion`, `catOrden`.
+
+## Componente `app-busqueda-select` — dropdown con buscador (sesión 2026-07-05)
+
+Reemplaza al `<select>` nativo del marca (feo, sin filtro). Componente **standalone reutilizable** en `shared/components/busqueda-select/`. Recibe `[opciones]` (`{id,nombre}[]`), `[valor]`, `placeholder`; emite `(valorChange)`. Trigger con bordes redondeados (tokens `--p*`), input de búsqueda que filtra en vivo, opciones redondeadas, navegación teclado (↑↓ Enter Esc). Usado en marca de crear y editar.
+
+**Gotcha clave — panel recortado por overflow del modal:** un panel `position:absolute` dentro del body del modal (que tiene scroll/`overflow`) **se recorta**. Solución: montar el panel con **CDK Overlay** (`cdkConnectedOverlay`, `@angular/cdk/overlay`), que lo renderiza en el `cdk-overlay-container` al final del `<body>`, fuera de cualquier contenedor con scroll. El ancho se sincroniza al ancho del trigger (`cdkConnectedOverlayWidth`), reposiciona arriba/abajo, cierra con `overlayOutsideClick`. El CSS del panel sigue funcionando porque el embedded view conserva la encapsulación del componente. El CSS del overlay ya está cargado (lo usa `MatDialog`).
+
+## Campo Descripción — un solo campo, máx 80 (sesión 2026-07-05)
+
+`Descripción` (crear) y `Descripción del catálogo` (editar>Catálogo) **eran el MISMO campo** `producto.descripcion` (`crearDescripcion` y `catDescripcion` escriben la misma columna). Confundía por la etiqueta distinta. **Homologado**: catálogo ahora dice solo "Descripción" con el mismo placeholder que crear. **Límite 80 caracteres** en 3 capas: `@MaxLength(80)` en `CrearProductoDto` (cubre también `ActualizarProductoDto` vía `PartialType`) + `maxlength="80"` + contador `/80` en ambos textareas (warn amarillo >70).
 
 ### Tab "Imágenes"
 Grid thumbnails 88×88px. Sub-modal de confirmación (z-index 9100). Toggle "Marcar como principal".

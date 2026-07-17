@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-*Last updated: 2026-05-29*
+*Last updated: 2026-06-22*
 
 ## Product Overview
 **One-liner:** La plataforma para crear tu tienda online con inventario integrado — sin complicaciones técnicas.
@@ -107,6 +107,24 @@
 | Profesional desde el día 1 | Plantillas de diseño listas para usar |
 
 ## Goals
-**Business goal:** Conseguir primeros clientes pagando en Perú — meta numérica por definir.
-**Conversion action:** Registro en la plataforma + activar catálogo público.
+**Business goal:** Conseguir los primeros 10 clientes pagando en Perú (objetivo ~julio 2026).
+**Conversion action:** El interesado escribe a Christian por **WhatsApp** → conversación de cierre → paga por **Yape** (manual) → Christian activa la cuenta y publica el catálogo. El "registro autoservicio + tarjeta" NO se usa todavía. El CTA de toda landing/copy es **"Escríbeme por WhatsApp"**, no "regístrate".
 **Current metrics:** Producto en fase de lanzamiento — sin métricas de adquisición aún.
+
+## Estado del Producto y Planes Activos (2026-06-22)
+**Etapa:** Pre-lanzamiento, 0 clientes pagantes. Adquisición de los primeros 10 se hace a mano (outbound + landing que convierta), no con ads todavía.
+
+**Modelo de cobro actual (manual, intencional):** El cliente paga por **Yape directo a Christian**. Flujo: catálogo/landing → contacto por **WhatsApp** → cierre conversado → cobro Yape → activación manual de la cuenta. La integración de pagos automáticos (Culqi/Stripe) y el registro autoservicio quedan para más adelante; hoy NO son requisito para cobrar. Todo el marketing debe empujar al canal WhatsApp, no a un checkout.
+
+**Diferenciadores ya construidos (úsalos en el mensaje):**
+- Catálogo público multi-plantilla (Next.js): plantillas como diseños completos distintos — grilla mint y esencias/lujo. Vende "diseño profesional sin desarrollador".
+- Variantes (Talla/Color) + categorías y filtros/facetas en el catálogo (desde 2026-06-17): el catálogo es navegable y filtrable, no una grilla plana.
+- Inventario multi-sede + app Android integrados con el mismo catálogo.
+
+**Gaps técnicos (NO bloquean cobrar — el cobro es manual por Yape):**
+- Pagos automáticos (Culqi/Stripe) + corte por `fecha_vencimiento`: diferidos. Mientras el volumen sea bajo, el cobro Yape manual basta. Reevaluar cuando haya muchos clientes para automatizar.
+- Dominio propio: gap técnico → comunicar siempre como "próximamente".
+
+**Códigos de adquisición vigentes:** `ADIFNEX1` (2 meses gratis, primeros 10), `JULIO2026` (50% x 3 meses, lanzamiento público), `REFERIDO` (1 mes, activar con 3+ clientes).
+
+**Playbook y orquestación:** ver `wiki/sintesis/paquete-marketing-adifnex.md` y el agente `marketing-asesor`.

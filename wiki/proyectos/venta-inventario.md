@@ -3,7 +3,7 @@ titulo: Venta e Inventario Multi-Sede (Adifnex)
 tipo: proyecto
 tags: [inventario, ventas, multi-sede, fullstack, angular, nestjs, android, kotlin, sequelize, adifnex]
 fecha_creacion: 2026-05-06
-fecha_actualizacion: 2026-05-15
+fecha_actualizacion: 2026-07-08
 estado: activo
 ---
 
@@ -42,6 +42,7 @@ Sistema multi-plataforma de gestión de inventario multi-sede. Backend NestJS, f
 - [[venta-inventario-catalogo]] — Catálogo público Next.js, plantillas, permisos Plan 2, migración 014
 - [[venta-inventario-variantes]] — Categorías jerárquicas + variantes (talla/color), facetas catálogo, plan en fases
 - [[venta-inventario-correo]] — Módulo correo Gmail SMTP, bienvenida, recuperación contraseña
+- [[venta-inventario-auditoria-backend]] — Auditoría de arquitectura backend (8 fases/64 fichas): SOLID, clean code, Swagger, seguridad, observabilidad
 
 ## Regla: consultar schema antes de escribir migraciones SQL
 
